@@ -9,8 +9,11 @@ const server = http.createServer(app);
 
 // WebSocket implementation for real-time updates (Session 8 requirement)
 const io = new Server(server, { cors: { origin: "*" } });
+socket.on('new-order', (data) => {
+    io.emit('order-alert', { message: "A new toy was just purchased!" });
+});
 
-app.use(express.json());
+app.use('/api/auth', require('./routes/authRoutes'));
 
 io.on('connection', (socket) => {
   console.log('User connected to Toy Store live updates');
