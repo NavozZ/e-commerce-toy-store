@@ -1,0 +1,19 @@
+services:
+  frontend:
+    image: nginx:alpine
+    volumes:
+      - ./client/dist:/usr/share/nginx/html
+    ports:
+      - "81:80"
+  backend:
+    build: ./server
+    ports:
+      - "82:5000"
+    environment:
+      - MONGODB_URI=mongodb://db:27017/toystore
+    depends_on:
+      - db
+  db:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
