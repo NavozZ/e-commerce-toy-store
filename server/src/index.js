@@ -15,6 +15,7 @@ socket.on('new-order', (data) => {
 
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/products', require('./routes/productRoutes'));
+app.use('/api/search', require('./routes/searchRoutes'));
 
 io.on('connection', (socket) => {
   console.log('User connected to Toy Store live updates');
