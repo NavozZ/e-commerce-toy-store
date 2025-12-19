@@ -7,6 +7,24 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
+// WebSocket logic - Session 8
+io.on('connection', (socket) => {
+  console.log('Member 4: User connected to Live Feed');
+
+  // Listen for a 'new-purchase' event from one client
+  socket.on('new-purchase', (data) => {
+    // Broadcast to ALL connected clients (Live update)
+    io.emit('broadcast-alert', {
+      message: `🔥 Hot Item: Someone just bought ${data.itemName}!`,
+      time: new Date().toLocaleTimeString()
+    });
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User left Live Feed');
+  });
+}); 
+
 // WebSocket implementation for real-time updates (Session 8 requirement)
 const io = new Server(server, { cors: { origin: "*" } });
 socket.on('new-order', (data) => {
