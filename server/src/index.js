@@ -42,4 +42,13 @@ io.on('connection', (socket) => {
 app.get('/', (req, res) => res.send('Toy Store API Running'));
 
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// Only listen if NOT running a test
+if (process.env.NODE_ENV !== 'test') {
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+}
+
+// You MUST export app for the tests to load it
+module.exports = app;
