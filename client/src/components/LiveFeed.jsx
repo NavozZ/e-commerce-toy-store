@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import { Radio } from 'lucide-react';
 
-const socket = io('http://localhost:5000'); // Explicit port for testing
+const SOCKET_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const socket = io(SOCKET_URL);
 
 const LiveFeed = () => {
   const [msg, setMsg] = useState("Waiting for store activity...");
