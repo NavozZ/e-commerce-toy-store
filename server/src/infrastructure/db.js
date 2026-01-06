@@ -1,10 +1,9 @@
-// server/src/infrastructure/db.js
 const mongoose = require('mongoose');
 
 const connectDB = async () => {
   try {
-    // Use the DB service name from compose.yaml or an environment variable
-    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://db:27017/toystore');
+    // Port 27017 is standard. 'db' matches your compose.yaml service name.
+    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://navodyatheshan4_db_user:ZOId7jbikOuGU6PN@toystore.dixr9mo.mongodb.net/?appName=toystore');
     console.log(`MongoDB Connected: ${conn.connection.host} 🧸`);
   } catch (error) {
     console.error(`Error: ${error.message}`);
