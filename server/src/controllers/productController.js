@@ -1,4 +1,4 @@
-const Product = require('../models/User'); // Ensure path is correct
+const Product = require('../models/Product');
 
 // Get all toys
 exports.getAllProducts = async (req, res) => {
