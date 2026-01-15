@@ -2,14 +2,12 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
   try {
-    // 1. Use ENV variable if active (Docker sets this)
-    // 2. Use 127.0.0.1 for local development (npm run dev)
+    // Priority: Cloud URI -> Local Docker Container -> Local Node
     const dbURI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/toystore';
-    
-    const conn = await mongoose.connect(dbURI);
-    console.log(`MongoDB Connected: ${conn.connection.host} 🧸`);
+    await mongoose.connect(dbURI);
+    console.log(`MongoDB Connected 🧸`);
   } catch (error) {
-    console.error(`Error: ${error.message}`);
+    console.error(`Infrastucture Error: ${error.message}`);
     process.exit(1);
   }
 };
