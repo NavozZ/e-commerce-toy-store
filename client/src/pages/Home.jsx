@@ -4,6 +4,7 @@ import { Rocket, ShieldCheck, Truck } from 'lucide-react';
 import Hero from '../components/Hero';
 import Categories from '../components/Categories';
 import About from '../components/About';
+import BestSellers from '../components/BestSellers';
 
 
 const Home = () => {
@@ -13,6 +14,7 @@ const Home = () => {
       <Hero />
       <Categories />
       <About />
+      <BestSellers />
 
       
     </div>

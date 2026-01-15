@@ -15,6 +15,13 @@ exports.createProduct = async (req, res) => {
   const product = new Product(req.body);
   try {
     const newProduct = await product.save();
+    
+    // Emit alert to all connected clients via the shared io instance
+    const io = req.app.get('socketio');
+    io.emit('broadcast-alert', {
+      message: `New Arrival: ${newProduct.name} is now available! 🧸`
+    });
+
     res.status(201).json(newProduct);
   } catch (err) {
     res.status(400).json({ message: err.message });

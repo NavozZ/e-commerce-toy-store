@@ -2,16 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import { Radio } from 'lucide-react';
 
-const SOCKET_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-const socket = io(SOCKET_URL);
+// REMOVE: Hardcoded http://localhost:5000
+// Instead, initialize without a URL so it uses the Vite Proxy
+const socket = io(); 
 
 const LiveFeed = () => {
   const [msg, setMsg] = useState("Waiting for store activity...");
 
   useEffect(() => {
+    // Listen for the 'broadcast-alert' event defined in server/src/index.js
     socket.on('broadcast-alert', (data) => {
       setMsg(data.message);
     });
+
+    // Cleanup on unmount to prevent memory leaks
     return () => socket.off('broadcast-alert');
   }, []);
 

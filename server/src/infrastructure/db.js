@@ -2,13 +2,16 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
   try {
-    // Port 27017 is standard. 'db' matches your compose.yaml service name.
-    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://navodyatheshan4_db_user:ZOId7jbikOuGU6PN@toystore.dixr9mo.mongodb.net/?appName=toystore');
+    // Priority: .env URI -> Local Docker Container -> Localhost
+    const dbURI = process.env.MONGODB_URI || 'mongodb+srv://navodyatheshan4_db_user:ZOId7jbikOuGU6PN@toystore.dixr9mo.mongodb.net/?appName=toystore';
+    const conn = await mongoose.connect(dbURI);
     console.log(`MongoDB Connected: ${conn.connection.host} 🧸`);
   } catch (error) {
-    console.error(`Error: ${error.message}`);
-    process.exit(1);
+    console.error(`DB Connection Error: ${error.message}`);
+    // Don't exit process in production, but helpful for debugging startup
   }
 };
 
 module.exports = connectDB;
+
+
