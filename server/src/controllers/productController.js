@@ -3,18 +3,17 @@ const Product = require('../models/Product');
 // Get all toys
 exports.getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find();
+    const products = await Product.find({});
     res.json(products);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: "Member 1 Error: " + err.message });
   }
 };
 
-// Create a new toy (Admin task)
+
 exports.createProduct = async (req, res) => {
-  const product = new Product(req.body);
   try {
-    const newProduct = await product.save();
+    const newProduct = await Product.create(req.body);
     
     // Emit alert to all connected clients via the shared io instance
     const io = req.app.get('socketio');
