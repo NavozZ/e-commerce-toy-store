@@ -1,70 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext'; // Import Context
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { LogIn, UserPlus } from 'lucide-react';
 
 const Login = () => {
-  const [isLogin, setIsLogin] = useState(true);
-  const [formData, setFormData] = useState({ email: '', password: '', username: '' });
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { login } = useContext(AuthContext); // Get login function
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
     try {
-      const res = await axios.post(endpoint, formData);
-      if (isLogin) {
-        localStorage.setItem('token', res.data.token);
-        alert('Logged in successfully! ✅');
-      } else {
-        alert('Registered successfully! Please login. 🧸');
-        setIsLogin(true);
-      }
+      // Connect to Member 2's Backend
+      const { data } = await axios.post('/api/auth/login', { email, password });
+      
+      // Update Global State
+      login(data);
+      
+      alert(`Welcome back, ${data.name}!`);
+      navigate('/'); // Redirect to Home
     } catch (err) {
-      alert(err.response?.data?.error || 'Authentication failed');
+      alert(err.response?.data?.message || "Login failed");
     }
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white p-8 rounded-3xl shadow-lg border border-gray-100 mt-10">
-      <div className="flex justify-center mb-6 text-blue-600">
-        {isLogin ? <LogIn size={48} /> : <UserPlus size={48} />}
-      </div>
-      <h2 className="text-2xl font-bold text-center mb-6">
-        {isLogin ? 'Welcome Back' : 'Create Account'}
-      </h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {!isLogin && (
-          <input
-            type="text"
-            placeholder="Username"
-            className="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none"
-            onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-            required
-          />
-        )}
-        <input
-          type="email"
-          placeholder="Email Address"
-          className="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none"
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          required
+    <div className="max-w-md mx-auto mt-20 p-8 bg-white rounded-3xl shadow-xl">
+      <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Welcome Back</h2>
+      <form onSubmit={handleLogin} className="space-y-4">
+        <input 
+          type="email" 
+          placeholder="Email" 
+          className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:border-blue-500 outline-none"
+          onChange={e => setEmail(e.target.value)} 
         />
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none"
-          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-          required
+        <input 
+          type="password" 
+          placeholder="Password" 
+          className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:border-blue-500 outline-none"
+          onChange={e => setPassword(e.target.value)} 
         />
-        <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition shadow-md">
-          {isLogin ? 'Login' : 'Sign Up'}
+        <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold transition-all">
+          Sign In
         </button>
       </form>
-      <p className="text-center mt-6 text-gray-500 text-sm">
-        {isLogin ? "Don't have an account? " : "Already have an account? "}
-        <button onClick={() => setIsLogin(!isLogin)} className="text-blue-600 font-bold hover:underline">
-          {isLogin ? 'Register' : 'Login'}
-        </button>
-      </p>
     </div>
   );
 };
