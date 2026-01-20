@@ -26,6 +26,7 @@ const NotFound = () => (
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
+      <CartProvider>  
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<RootLayout />}>
@@ -43,6 +44,7 @@ createRoot(document.getElementById("root")).render(
           </Route>
         </Routes>
       </BrowserRouter>
+      </CartProvider>
     </AuthProvider>
   </StrictMode>
 );
