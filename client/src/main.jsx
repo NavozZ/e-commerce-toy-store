@@ -8,6 +8,7 @@ import { AuthProvider } from './context/AuthContext';
 // Layouts
 import RootLayout from './components/layouts/RootLayout';
 import ProtectLayout from './components/layouts/ProtectLayout';
+import AdminProtectLayout from './components/layouts/AdminProtectLayout';
 
 // Pages
 import Home from './pages/Home';
@@ -17,6 +18,7 @@ import Register from './pages/Register'; // Import the new page
 import Cart from './pages/Cart';
 import Search from './pages/Search';
 import { CartProvider } from './context/CartContext';
+import AdminDashboard from './pages/admin/AdminDashboard';
 
 const NotFound = () => (
   <div className="text-center py-20 text-2xl font-bold text-gray-500">
@@ -36,6 +38,11 @@ createRoot(document.getElementById("root")).render(
             <Route path="search" element={<Search />} />
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} /> {/* Add this line */}
+
+            <Route element={<AdminProtectLayout />}>
+              <Route path="admin" element={<AdminDashboard />} />
+            {/* Add more admin pages here like /admin/users or /admin/products */}
+            </Route>
 
             <Route element={<ProtectLayout />}>
               <Route path="cart" element={<Cart />} />

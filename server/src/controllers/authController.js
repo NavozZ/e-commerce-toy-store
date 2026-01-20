@@ -28,6 +28,7 @@ exports.registerUser = async (req, res) => {
         _id: user.id,
         name: user.name,
         email: user.email,
+        isAdmin: user.isAdmin,
         token: generateToken(user.id),
       });
     }
@@ -48,6 +49,7 @@ exports.loginUser = async (req, res) => {
         _id: user.id,
         name: user.name, // ✅ FIX: Must match database field 'name'
         email: user.email,
+        isAdmin: user.isAdmin,
         token: generateToken(user.id),
       });
     } else {
