@@ -1,27 +1,43 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
-import { ShoppingCart } from 'lucide-react';
+import { CartContext } from '../context/CartContext'; // Import the context
+import { ShoppingBag } from 'lucide-react';
 
 const Products = () => {
-  const [toys, setToys] = useState([]);
+  const [products, setProducts] = useState([]);
+  const { addToCart } = useContext(CartContext); // Get the add function
 
   useEffect(() => {
-    // Falls back to empty array if backend is down
-    axios.get('/api/products').then(res => setToys(res.data)).catch(() => {});
+    const fetchProducts = async () => {
+      const { data } = await axios.get('/api/products');
+      setProducts(data);
+    };
+    fetchProducts();
   }, []);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 p-4">
-      {toys.map(toy => (
-        <div key={toy._id} className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 group">
-          <img src={toy.imageUrl} className="h-40 w-full object-cover rounded-xl mb-4 group-hover:scale-105 transition" />
-          <h3 className="font-bold text-lg">{toy.name}</h3>
-          <p className="text-blue-600 font-bold">${toy.price}</p>
-          <button className="w-full mt-4 bg-gray-900 text-white py-2 rounded-lg flex items-center justify-center gap-2">
-            <ShoppingCart size={16} /> Add
-          </button>
-        </div>
-      ))}
+    <div className="max-w-[1400px] mx-auto px-6 py-10">
+      <h1 className="text-4xl font-black mb-10 text-gray-800">Explore Our Toys 🎠</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {products.map((product) => (
+          <div key={product._id} className="bg-white p-6 rounded-[2.5rem] shadow-sm hover:shadow-xl transition-all group border border-gray-100">
+            <img src={product.image} alt={product.name} className="w-full h-48 object-contain mb-4 group-hover:scale-110 transition-transform" />
+            <h3 className="font-bold text-lg mb-1">{product.name}</h3>
+            <p className="text-blue-600 font-black text-xl mb-4">${product.price}</p>
+            
+            {/* ADD TO CART BUTTON */}
+            <button 
+              onClick={() => {
+                addToCart(product);
+                alert(`${product.name} added to bag! 🐾`);
+              }}
+              className="w-full flex items-center justify-center gap-2 bg-gray-900 text-white py-3 rounded-2xl font-bold hover:bg-blue-600 transition-colors"
+            >
+              <ShoppingBag size={18} /> Add to Bag
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
