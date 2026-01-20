@@ -1,10 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const orderController = require('../controllers/orderController');
-// Note: We will add the 'protect' middleware here in the next step to secure these routes
+const { createOrder, getMyOrders } = require('../controllers/orderController');
 const { protect } = require('../middleware/authMiddleware'); 
 
-router.post('/', protect, orderController.createOrder);
-router.get('/myorders', protect, orderController.getUserOrders);
+router.route('/').post(protect, createOrder);
+router.route('/myorders').get(protect, getMyOrders);
 
 module.exports = router;
