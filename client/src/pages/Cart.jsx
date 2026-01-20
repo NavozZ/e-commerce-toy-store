@@ -60,7 +60,7 @@ const Cart = () => {
   }
 
   return (
-    <div className="max-w-[1400px] mx-auto px-6 py-10 lg:flex gap-10">
+    <div className="max-w-350 mx-auto px-6 py-10 lg:flex gap-10">
       {/* Left: Item List */}
       <div className="flex-1 space-y-6">
         <h1 className="text-4xl font-black mb-10 text-gray-800 flex items-center gap-4">
@@ -69,7 +69,7 @@ const Cart = () => {
         
         {cartItems.map((item) => (
           <div key={item._id} className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-gray-100 flex items-center gap-6">
-            <div className="w-24 h-24 bg-gray-50 rounded-2xl overflow-hidden flex-shrink-0">
+            <div className="w-24 h-24 bg-gray-50 rounded-2xl overflow-hidden shrink-0">
               <img src={item.image} alt={item.name} className="w-full h-full object-contain p-2" />
             </div>
             
@@ -115,7 +115,7 @@ const Cart = () => {
           
           <button 
             onClick={handleCheckout}
-            className="w-full bg-blue-600 text-white py-5 rounded-[1.5rem] font-black text-lg hover:bg-white hover:text-blue-600 transition-all flex items-center justify-center gap-3"
+            className="w-full bg-blue-600 text-white py-5 rounded-3xl font-black text-lg hover:bg-white hover:text-blue-600 transition-all flex items-center justify-center gap-3"
           >
             Checkout <ArrowRight size={20} />
           </button>

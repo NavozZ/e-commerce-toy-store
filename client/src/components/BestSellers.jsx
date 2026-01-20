@@ -90,7 +90,7 @@ const BestSellers = () => {
                   addToCart(product);
                   // Optional: Trigger a notification instead of an alert
                 }}
-                className="w-full flex items-center justify-center gap-3 bg-gray-900 text-white py-4 rounded-[1.5rem] font-black hover:bg-blue-600 transition-all active:scale-95 hover:shadow-blue-200 hover:shadow-xl"
+                className="w-full flex items-center justify-center gap-3 bg-gray-900 text-white py-4 rounded-3xl font-black hover:bg-blue-600 transition-all active:scale-95 hover:shadow-blue-200 hover:shadow-xl"
               >
                 <ShoppingBag size={20} />
                 Add to Bag
