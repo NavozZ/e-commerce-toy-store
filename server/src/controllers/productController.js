@@ -17,11 +17,11 @@ exports.createProduct = async (req, res) => {
     
   
     const io = req.app.get('socketio');
-    if (io) {
-      io.emit('broadcast-alert', {
-        message: `🐾 New Item: ${newProduct.name} is now available!`
-      });
-    }
+if (io) {
+  io.emit('broadcast-alert', {
+    message: `✨ New Toy Alert: ${newProduct.name} has just been added to the store!`
+  });
+}
     res.status(201).json(newProduct);
   } catch (err) {
     res.status(400).json({ message: err.message });
