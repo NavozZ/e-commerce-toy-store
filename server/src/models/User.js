@@ -2,18 +2,17 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
-  username: { type: String, required: true, unique: true },
+  name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: { type: String, default: 'customer' } // customer or admin
+  isAdmin: { type: Boolean, default: false }
 }, { timestamps: true });
 
-// Hashing logic - Mandatory for high marks
-userSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) return next();
+// ✅ FIX: Removed 'next' parameter to support async/await correctly
+userSchema.pre('save', async function() {
+  if (!this.isModified('password')) return;
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
-  next();
 });
 
 module.exports = mongoose.model('User', userSchema);
