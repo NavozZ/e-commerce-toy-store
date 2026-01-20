@@ -16,6 +16,7 @@ import Login from './pages/Login';
 import Register from './pages/Register'; // Import the new page
 import Cart from './pages/Cart';
 import Search from './pages/Search';
+import { CartProvider } from './context/CartContext';
 
 const NotFound = () => (
   <div className="text-center py-20 text-2xl font-bold text-gray-500">
@@ -26,6 +27,7 @@ const NotFound = () => (
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
+      <CartProvider>  
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<RootLayout />}>
@@ -43,6 +45,7 @@ createRoot(document.getElementById("root")).render(
           </Route>
         </Routes>
       </BrowserRouter>
+      </CartProvider>
     </AuthProvider>
   </StrictMode>
 );

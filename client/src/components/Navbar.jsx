@@ -2,8 +2,10 @@ import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, User, Search, LogOut, LayoutGrid, ToyBrick, Car, Dog } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext'; // Import Context
+import { CartContext } from '../context/CartContext';
 
 const Navbar = () => {
+  const { cartCount } = useContext(CartContext);
   const { user, logout } = useContext(AuthContext); // Get user state
   const navigate = useNavigate();
 
@@ -50,6 +52,11 @@ const Navbar = () => {
 
           <Link to="/cart" className="relative p-2 text-gray-600 hover:text-blue-600">
             <ShoppingCart size={22} />
+            {cartCount > 0 && (
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-black rounded-full h-5 w-5 flex items-center justify-center animate-bounce">
+            {cartCount}
+            </span>
+             )}
           </Link>
         </div>
       </div>
