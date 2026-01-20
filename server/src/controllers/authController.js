@@ -2,28 +2,58 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-exports.register = async (req, res) => {
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET || 'secret_key', { expiresIn: '30d' });
+};
+
+// POST /api/auth/register
+exports.registerUser = async (req, res) => {
+  const { name, email, password } = req.body;
   try {
-    const { username, email, password } = req.body;
-    const user = new User({ username, email, password });
-    await user.save();
-    res.status(201).json({ message: "User created successfully" });
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: 'Please add all fields' });
+    }
+
+    // Check existing user
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
+
+    // ✅ FIX: Send plain password. The User model handles hashing.
+    const user = await User.create({ name, email, password });
+
+    if (user) {
+      res.status(201).json({
+        _id: user.id,
+        name: user.name,
+        email: user.email,
+        token: generateToken(user.id),
+      });
+    }
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error(error);
+    res.status(500).json({ message: error.message });
   }
 };
 
-exports.login = async (req, res) => {
+// POST /api/auth/login
+exports.loginUser = async (req, res) => {
+  const { email, password } = req.body;
   try {
-    const { email, password } = req.body;
     const user = await User.findOne({ email });
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(401).json({ error: "Invalid credentials" });
+
+    if (user && (await bcrypt.compare(password, user.password))) {
+      res.json({
+        _id: user.id,
+        name: user.name, // ✅ FIX: Must match database field 'name'
+        email: user.email,
+        token: generateToken(user.id),
+      });
+    } else {
+      res.status(401).json({ message: 'Invalid credentials' });
     }
-    // Generate JWT Token (Session management requirement)
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET || 'secret_key', { expiresIn: '1h' });
-    res.json({ token, username: user.username, role: user.role });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
