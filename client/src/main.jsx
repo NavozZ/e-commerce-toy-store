@@ -19,6 +19,7 @@ import Cart from './pages/Cart';
 import Search from './pages/Search';
 import { CartProvider } from './context/CartContext';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import ManageProducts from './pages/admin/ManageProducts';
 
 const NotFound = () => (
   <div className="text-center py-20 text-2xl font-bold text-gray-500">
@@ -41,6 +42,7 @@ createRoot(document.getElementById("root")).render(
 
             <Route element={<AdminProtectLayout />}>
               <Route path="admin" element={<AdminDashboard />} />
+              <Route path="admin/products" element={<ManageProducts />} />
             {/* Add more admin pages here like /admin/users or /admin/products */}
             </Route>
 
