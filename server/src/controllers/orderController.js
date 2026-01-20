@@ -1,31 +1,40 @@
 const Order = require('../models/Order');
 
-// Member 3 Logic: Create Order from Cart
+// @desc    Create new order
+// @route   POST /api/orders
+// @access  Private
 exports.createOrder = async (req, res) => {
-  try {
-    const { items, totalPrice, shippingAddress } = req.body;
+  const { orderItems, shippingAddress, totalPrice } = req.body;
 
-    // Attach user ID from Member 2's protect middleware
-    const order = new Order({
-      user: req.user.id, 
-      items,
-      totalPrice,
-      shippingAddress
-    });
+  if (orderItems && orderItems.length === 0) {
+    return res.status(400).json({ message: 'No order items' });
+  } else {
+    try {
+      const order = new Order({
+        user: req.user._id, 
+        orderItems,
+        shippingAddress,
+        totalPrice,
+        isPaid: true, 
+        paidAt: Date.now(),
+      });
 
-    const createdOrder = await order.save();
-    res.status(201).json(createdOrder);
-  } catch (error) {
-    res.status(400).json({ error: "Member 3 Error: " + error.message });
+      const createdOrder = await order.save();
+      res.status(201).json(createdOrder);
+    } catch (error) {
+      res.status(500).json({ message: 'Order creation failed: ' + error.message });
+    }
   }
 };
 
-// Member 3 Logic: Fetch User History
-exports.getUserOrders = async (req, res) => {
+// @desc    Get logged in user orders
+// @route   GET /api/orders/myorders
+// @access  Private
+exports.getMyOrders = async (req, res) => {
   try {
-    const orders = await Order.find({ user: req.user.id });
+    const orders = await Order.find({ user: req.user._id });
     res.json(orders);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };

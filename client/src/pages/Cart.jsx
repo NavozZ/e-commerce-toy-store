@@ -1,53 +1,78 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
+import { AuthContext } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
-  // Member 3 Logic: LocalStorage Persistence
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+  
+  // Simple cart state (In a real app, this might come from Context/Redux)
   const [cartItems, setCartItems] = useState(() => {
-    const savedCart = localStorage.getItem('bunny_cart');
-    return savedCart ? JSON.parse(savedCart) : [];
+    return JSON.parse(localStorage.getItem('bunny_cart')) || [];
   });
 
-  const total = cartItems.reduce((acc, item) => acc + item.price, 0);
+  const totalPrice = cartItems.reduce((acc, item) => acc + item.price, 0);
 
   const handleCheckout = async () => {
+    if (!user) {
+      alert("Please login to checkout!");
+      navigate('/login');
+      return;
+    }
+
     try {
-      const token = localStorage.getItem('token');
-      if (!token) return alert("Please login first! (Member 2 Security Check)");
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`, // <--- Sending the Token!
+        },
+      };
 
-      await axios.post('/api/orders', 
-        { items: cartItems, totalPrice: total },
-        { headers: { Authorization: `Bearer ${token}` }}
-      );
+      // Mock Shipping Address
+      const orderData = {
+        orderItems: cartItems,
+        shippingAddress: { address: "123 Toy St", city: "Playtown" },
+        totalPrice: totalPrice
+      };
 
-      alert("Order Placed Successfully! 🚀");
-      setCartItems([]);
+      const { data } = await axios.post('/api/orders', orderData, config);
+
+      alert(`Order Placed Successfully! ID: ${data._id}`);
+      
+      // Clear Cart
       localStorage.removeItem('bunny_cart');
-    } catch (err) {
-      alert("Checkout failed. Member 3 logic error.");
+      setCartItems([]);
+      
+    } catch (error) {
+      alert(error.response?.data?.message || "Checkout Failed");
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-10 bg-white rounded-[3rem] shadow-xl my-10">
-      <h2 className="text-3xl font-black mb-8">Your Toy Bag 🧸</h2>
+    <div className="max-w-4xl mx-auto p-8">
+      <h2 className="text-3xl font-bold mb-6">Shopping Cart 🛒</h2>
+      
       {cartItems.length === 0 ? (
-        <p className="italic text-gray-400">Bag is empty. Add some toys from the catalog!</p>
+        <p>Your cart is empty.</p>
       ) : (
-        <div className="space-y-6">
-          {cartItems.map((item, idx) => (
-            <div key={idx} className="flex justify-between border-b pb-4">
-              <span className="font-bold">{item.name}</span>
-              <span className="text-blue-600">${item.price}</span>
+        <div className="space-y-4">
+            {cartItems.map((item, index) => (
+                <div key={index} className="flex justify-between border-b pb-2">
+                    <span>{item.name}</span>
+                    <span className="font-bold">${item.price}</span>
+                </div>
+            ))}
+            
+            <div className="text-right text-xl font-bold mt-4">
+                Total: ${totalPrice.toFixed(2)}
             </div>
-          ))}
-          <div className="text-right text-2xl font-black">Total: ${total.toFixed(2)}</div>
-          <button 
-            onClick={handleCheckout}
-            className="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold hover:bg-black transition-all"
-          >
-            Confirm & Pay
-          </button>
+
+            <button 
+                onClick={handleCheckout}
+                className="w-full bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 transition"
+            >
+                Proceed to Checkout
+            </button>
         </div>
       )}
     </div>
