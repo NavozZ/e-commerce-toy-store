@@ -1,30 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
-import { Radio } from 'lucide-react';
+import { Bell, Sparkles, X } from 'lucide-react';
 
-// REMOVE: Hardcoded http://localhost:5000
-// Instead, initialize without a URL so it uses the Vite Proxy
-const socket = io(); 
+const socket = io('http://localhost:5000'); // Connect to Member 4's backend
 
 const LiveFeed = () => {
-  const [msg, setMsg] = useState("Waiting for store activity...");
+  const [alert, setAlert] = useState(null);
 
   useEffect(() => {
-    // Listen for the 'broadcast-alert' event defined in server/src/index.js
+    // Member 4: Listen for store-wide broadcasts
     socket.on('broadcast-alert', (data) => {
-      setMsg(data.message);
+      setAlert(data.message);
+      // Auto-hide alert after 8 seconds
+      setTimeout(() => setAlert(null), 8000);
     });
 
-    // Cleanup on unmount to prevent memory leaks
     return () => socket.off('broadcast-alert');
   }, []);
 
+  if (!alert) return null;
+
   return (
-    <div className="bg-yellow-400 py-2 px-4 flex justify-center items-center gap-3">
-      <Radio size={16} className="animate-pulse text-yellow-900" />
-      <span className="text-xs font-bold uppercase tracking-widest text-yellow-900 truncate">
-        {msg}
-      </span>
+    <div className="fixed top-24 left-1/2 -translate-x-1/2 z-60 w-full max-w-md px-4 animate-in fade-in slide-in-from-top-4">
+      <div className="bg-blue-600 text-white p-4 rounded-3xl shadow-2xl flex items-center gap-4 border-4 border-white">
+        <div className="bg-white/20 p-2 rounded-full">
+          <Sparkles className="animate-pulse" size={20} />
+        </div>
+        <p className="flex-1 text-sm font-black italic">{alert}</p>
+        <button onClick={() => setAlert(null)} className="hover:rotate-90 transition-transform">
+          <X size={18} />
+        </button>
+      </div>
     </div>
   );
 };

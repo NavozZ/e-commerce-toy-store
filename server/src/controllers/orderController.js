@@ -6,24 +6,35 @@ const Order = require('../models/Order');
 exports.createOrder = async (req, res) => {
   const { orderItems, shippingAddress, totalPrice } = req.body;
 
-  if (orderItems && orderItems.length === 0) {
+  if (!orderItems || orderItems.length === 0) {
     return res.status(400).json({ message: 'No order items' });
-  } else {
-    try {
-      const order = new Order({
-        user: req.user._id, 
-        orderItems,
-        shippingAddress,
-        totalPrice,
-        isPaid: true, 
-        paidAt: Date.now(),
-      });
+  }
 
-      const createdOrder = await order.save();
-      res.status(201).json(createdOrder);
-    } catch (error) {
-      res.status(500).json({ message: 'Order creation failed: ' + error.message });
+  try {
+    const order = new Order({
+      user: req.user._id,
+      orderItems,
+      shippingAddress,
+      totalPrice,
+      isPaid: true,
+      paidAt: Date.now(),
+    });
+
+    const createdOrder = await order.save();
+
+    // 🔔 Socket.IO broadcast after order creation
+    const io = req.app.get('socketio');
+    if (io) {
+      io.emit('broadcast-alert', {
+        message: '🧸 Someone just adopted a toy from our collection!',
+      });
     }
+
+    res.status(201).json(createdOrder);
+  } catch (error) {
+    res.status(500).json({
+      message: 'Order creation failed: ' + error.message,
+    });
   }
 };
 
