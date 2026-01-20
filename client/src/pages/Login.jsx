@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext'; // Import Context
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 
 const Login = () => {
@@ -45,6 +45,12 @@ const Login = () => {
           Sign In
         </button>
       </form>
+      <div className="mt-6 text-center text-sm text-gray-500">
+        <p>Don't have an account?</p>
+        <Link to="/register" className="text-blue-600 font-bold hover:underline">
+          Create an account here
+        </Link>
+      </div>
     </div>
   );
 };
