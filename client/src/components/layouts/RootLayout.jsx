@@ -2,6 +2,7 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Navbar from '../Navbar';
 import LiveFeed from '../LiveFeed';
+import Footer from '../Footer';
 
 const RootLayout = () => {
   return (
@@ -14,6 +15,7 @@ const RootLayout = () => {
       <main>
         <Outlet />
       </main>
+      <Footer />
     </div>
   );
 };
