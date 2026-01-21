@@ -13,13 +13,13 @@ const categories = [
 
 const Categories = () => {
   return (
-    <section>
-      <h2 className="text-2xl font-black mb-8 text-gray-800 uppercase tracking-tight">Popular Categories</h2>
+    <section className="py-10">
+      <h2 className="text-2xl font-black mb-8 text-gray-800 uppercase tracking-tight">Shop by Category</h2>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
         {categories.map((cat) => (
           <Link 
             key={cat.name} 
-            to={`/search?category=${cat.name}`} // Link to the dynamic filter
+            to={`/search?category=${cat.name}`} 
             className="flex flex-col items-center gap-4 p-8 rounded-[2rem] bg-white border border-gray-100 hover:border-blue-200 hover:shadow-lg transition-all group"
           >
             <div className={`p-4 rounded-2xl ${cat.color} group-hover:scale-110 transition-transform`}>
