@@ -1,128 +1,109 @@
-import React, { useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Trash2, Plus, Minus, ArrowRight, ShoppingBag } from 'lucide-react';
-import { CartContext } from '../context/CartContext';
-import { AuthContext } from '../context/AuthContext';
+import React, { useState, useContext, useEffect } from 'react';
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 import axios from 'axios';
+import { AuthContext } from '../context/AuthContext';
+import { CartContext } from '../context/CartContext';
+import CheckoutForm from '../components/CheckoutForm';
+import { ShoppingBag, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+
+// Replace with your PUBLIC Key from Stripe Dashboard
+const stripePromise = loadStripe("pk_test_51R9tRPQPiO4dcg7Wj1RN7awlnSpV4xZQHI1F43JnXWJpKoHEvk5hNaZCscfp7UWC92gdjVPwAkBo9fNK5q8UOabN001GXLXazp");
 
 const Cart = () => {
-  const { cartItems, addToCart, removeFromCart, clearCart } = useContext(CartContext);
+  const { cartItems, clearCart } = useContext(CartContext);
   const { user } = useContext(AuthContext);
+  const [clientSecret, setClientSecret] = useState("");
+  const [showPayment, setShowPayment] = useState(false);
   const navigate = useNavigate();
 
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
 
-  const handleCheckout = async () => {
+  // Step 1: User clicks "Proceed to Checkout" -> We get a generic token from backend
+  const initiatePayment = async () => {
     if (!user) {
-      alert("Please login to complete your order! 🐾");
-      navigate('/login');
+      alert("Please login to checkout!");
       return;
     }
 
     try {
+      const { data } = await axios.post("/api/payment/create-payment-intent", 
+        { amount: subtotal }, 
+        { headers: { Authorization: `Bearer ${user.token}` } }
+      );
+      setClientSecret(data.clientSecret);
+      setShowPayment(true);
+    } catch (err) {
+      alert("Error initializing payment: " + err.message);
+    }
+  };
+
+  // Step 2: Payment Succeeded in CheckoutForm -> We save the Order
+  const handleOrderSuccess = async (paymentId) => {
+    try {
       const orderData = {
-        orderItems: cartItems.map(x => ({
-          name: x.name,
-          qty: x.qty,
-          image: x.image,
-          price: x.price,
-          product: x._id
-        })),
-        shippingAddress: { address: 'Default St', city: 'ToyCity' }, // Simplified for now
-        totalPrice: subtotal
+        orderItems: cartItems.map(x => ({ ...x, product: x._id })),
+        shippingAddress: { address: '123 Stripe St', city: 'Internet' },
+        totalPrice: subtotal,
+        paymentResult: { id: paymentId, status: 'completed', update_time: String(Date.now()) }
       };
 
       await axios.post('/api/orders', orderData, {
         headers: { Authorization: `Bearer ${user.token}` }
       });
 
-      alert("Order Placed! Thank you for shopping with Bunny & Bark 🧸");
+      alert("Order & Payment Successful! 🧸");
       clearCart();
-      navigate('/');
+      navigate('/account'); // Or success page
     } catch (err) {
-      alert("Checkout error: " + (err.response?.data?.message || err.message));
+      alert("Payment worked, but order saving failed: " + err.message);
     }
   };
 
-  if (cartItems.length === 0) {
-    return (
-      <div className="max-w-2xl mx-auto text-center py-20 px-6">
-        <div className="bg-blue-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-blue-600">
-          <ShoppingBag size={40} />
-        </div>
-        <h2 className="text-3xl font-black mb-4">Your Toy Bag is Empty</h2>
-        <p className="text-gray-500 mb-8">Looks like you haven't added any toys yet. Explore our collection to find the perfect gift!</p>
-        <Link to="/products" className="inline-flex items-center gap-2 bg-gray-900 text-white px-8 py-4 rounded-2xl font-bold hover:bg-blue-600 transition-all">
-          Go Shopping <ArrowRight size={18} />
-        </Link>
-      </div>
-    );
-  }
+  if (cartItems.length === 0) return <div className="text-center py-20 font-bold">Your bag is empty! 🛍️</div>;
 
   return (
     <div className="max-w-350 mx-auto px-6 py-10 lg:flex gap-10">
-      {/* Left: Item List */}
+      {/* Left: Cart Items (Same as before) */}
       <div className="flex-1 space-y-6">
-        <h1 className="text-4xl font-black mb-10 text-gray-800 flex items-center gap-4">
-          Your Bag <span className="text-sm font-bold bg-blue-100 text-blue-600 px-4 py-1 rounded-full">{cartItems.length} Items</span>
-        </h1>
-        
+        <h1 className="text-4xl font-black mb-10">Your Bag 🛒</h1>
         {cartItems.map((item) => (
-          <div key={item._id} className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-gray-100 flex items-center gap-6">
-            <div className="w-24 h-24 bg-gray-50 rounded-2xl overflow-hidden shrink-0">
-              <img src={item.image} alt={item.name} className="w-full h-full object-contain p-2" />
-            </div>
-            
-            <div className="flex-1">
-              <h3 className="font-bold text-xl">{item.name}</h3>
-              <p className="text-blue-600 font-black">${item.price}</p>
-            </div>
-
-            <div className="flex items-center gap-4 bg-gray-50 p-2 rounded-xl border border-gray-100">
-              <button onClick={() => removeFromCart(item._id)} className="p-1 hover:text-red-500"><Minus size={16} /></button>
-              <span className="font-black w-4 text-center">{item.qty}</span>
-              <button onClick={() => addToCart(item)} className="p-1 hover:text-blue-600"><Plus size={16} /></button>
-            </div>
-
-            <button 
-              onClick={() => removeFromCart(item._id)} 
-              className="text-gray-300 hover:text-red-500 transition-colors"
-            >
-              <Trash2 size={24} />
-            </button>
-          </div>
+           <div key={item._id} className="bg-white p-6 rounded-[2.5rem] flex items-center gap-6 shadow-sm border border-gray-100">
+             <img src={item.imageUrl} alt={item.name} className="w-20 h-20 object-contain" />
+             <div className="flex-1">
+               <h3 className="font-bold">{item.name}</h3>
+               <p className="text-blue-600 font-bold">${item.price}</p>
+             </div>
+             <span className="font-bold bg-gray-100 px-3 py-1 rounded-lg">x{item.qty}</span>
+           </div>
         ))}
       </div>
 
-      {/* Right: Summary Card */}
+      {/* Right: Payment Section */}
       <div className="w-full lg:w-96 mt-10 lg:mt-0">
         <div className="bg-gray-900 text-white p-10 rounded-[3rem] sticky top-24">
           <h2 className="text-2xl font-black mb-8">Summary</h2>
-          <div className="space-y-4 mb-8">
-            <div className="flex justify-between text-gray-400">
-              <span>Subtotal</span>
-              <span className="text-white font-bold">${subtotal.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between text-gray-400 border-b border-gray-800 pb-4">
-              <span>Shipping</span>
-              <span className="text-green-400 font-bold">FREE 🐾</span>
-            </div>
-            <div className="flex justify-between text-xl font-black pt-4">
-              <span>Total</span>
-              <span>${subtotal.toFixed(2)}</span>
-            </div>
+          <div className="flex justify-between text-xl font-black mb-8">
+            <span>Total</span>
+            <span>${subtotal.toFixed(2)}</span>
           </div>
-          
-          <button 
-            onClick={handleCheckout}
-            className="w-full bg-blue-600 text-white py-5 rounded-3xl font-black text-lg hover:bg-white hover:text-blue-600 transition-all flex items-center justify-center gap-3"
-          >
-            Checkout <ArrowRight size={20} />
-          </button>
-          
-          <p className="text-[10px] text-center mt-6 text-gray-500 uppercase tracking-widest font-bold">
-            Secure SSL Checkout
-          </p>
+
+          {!showPayment ? (
+            <button 
+              onClick={initiatePayment}
+              className="w-full bg-blue-600 text-white py-5 rounded-3xl font-black text-lg hover:bg-white hover:text-blue-600 transition-all flex items-center justify-center gap-3"
+            >
+              Proceed to Checkout <ArrowRight size={20} />
+            </button>
+          ) : (
+            // Render Stripe Elements when clientSecret is ready
+            clientSecret && (
+              <Elements options={{ clientSecret, appearance: { theme: 'night' } }} stripe={stripePromise}>
+                <CheckoutForm amount={subtotal} onSuccess={handleOrderSuccess} />
+              </Elements>
+            )
+          )}
         </div>
       </div>
     </div>

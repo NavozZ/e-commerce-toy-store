@@ -4,6 +4,7 @@ const { Server } = require('socket.io');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const connectDB = require('./infrastructure/db'); // Import DB helper
+const paymentRoutes = require('./routes/paymentRoutes');
 
 dotenv.config();
 connectDB(); // Mandatory connection before start
@@ -30,6 +31,8 @@ app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/orders', require('./routes/orderRoutes'));
 // Member 5: Search Routes
 app.use('/api/search', require('./routes/searchRoutes'));
+
+app.use('/api/payment', paymentRoutes);
 
 // Member 4: WebSocket Implementation
 io.on('connection', (socket) => {
