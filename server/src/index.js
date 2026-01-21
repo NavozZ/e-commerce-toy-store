@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 const connectDB = require('./infrastructure/db'); // Import DB helper
 const paymentRoutes = require('./routes/paymentRoutes');
 
-dotenv.config();
+require('dotenv').config();
 connectDB(); // Mandatory connection before start
 
 const app = express();
@@ -42,3 +42,5 @@ io.on('connection', (socket) => {
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+
