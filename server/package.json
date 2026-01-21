@@ -7,7 +7,7 @@
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "seed": "node src/seed.js",
-    "test": "mocha tests/**/*.test.js"
+    "test": "mocha tests/**/*.test.js --exit"
   },
   "keywords": [],
   "author": "",
@@ -23,11 +23,11 @@
     "stripe": "^20.2.0"
   },
   "devDependencies": {
-    "chai": "^6.2.1",
+    "chai": "^6.2.2",
     "cross-env": "^10.1.0",
     "jest": "^30.2.0",
     "mocha": "^11.7.5",
     "sinon": "^21.0.1",
-    "supertest": "^7.1.4"
+    "supertest": "^7.2.2"
   }
 }
