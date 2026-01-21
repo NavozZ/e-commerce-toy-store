@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom'; // 1. Import Link
+import { Link } from 'react-router-dom'; 
 import { CartContext } from '../context/CartContext';
 import { ShoppingBag } from 'lucide-react';
 
@@ -23,7 +23,7 @@ const Products = () => {
         {products.map((product) => (
           <div key={product._id} className="bg-white p-6 rounded-[2.5rem] shadow-sm hover:shadow-xl transition-all group border border-gray-100">
             
-            {/* 2. WRAP IMAGE & TITLE IN LINK */}
+            
             <Link to={`/product/${product._id}`}>
               <div className="cursor-pointer">
                 <img src={product.imageUrl || product.image} alt={product.name} className="w-full h-48 object-contain mb-4 group-hover:scale-110 transition-transform" />

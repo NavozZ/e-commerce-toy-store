@@ -8,7 +8,7 @@ import CheckoutForm from '../components/CheckoutForm';
 import { ShoppingBag, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-// Replace with your PUBLIC Key from Stripe Dashboard
+
 const stripePromise = loadStripe("pk_test_51R9tRPQPiO4dcg7Wj1RN7awlnSpV4xZQHI1F43JnXWJpKoHEvk5hNaZCscfp7UWC92gdjVPwAkBo9fNK5q8UOabN001GXLXazp");
 
 const Cart = () => {
@@ -20,7 +20,7 @@ const Cart = () => {
 
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
 
-  // Step 1: User clicks "Proceed to Checkout" -> We get a generic token from backend
+  
   const initiatePayment = async () => {
     if (!user) {
       alert("Please login to checkout!");
@@ -39,7 +39,7 @@ const Cart = () => {
     }
   };
 
-  // Step 2: Payment Succeeded in CheckoutForm -> We save the Order
+  
   const handleOrderSuccess = async (paymentId) => {
     try {
       const orderData = {
@@ -55,7 +55,7 @@ const Cart = () => {
 
       alert("Order & Payment Successful! 🧸");
       clearCart();
-      navigate('/account'); // Or success page
+      navigate('/account'); 
     } catch (err) {
       alert("Payment worked, but order saving failed: " + err.message);
     }
@@ -65,7 +65,7 @@ const Cart = () => {
 
   return (
     <div className="max-w-350 mx-auto px-6 py-10 lg:flex gap-10">
-      {/* Left: Cart Items (Same as before) */}
+      
       <div className="flex-1 space-y-6">
         <h1 className="text-4xl font-black mb-10">Your Bag 🛒</h1>
         {cartItems.map((item) => (
@@ -80,9 +80,9 @@ const Cart = () => {
         ))}
       </div>
 
-      {/* Right: Payment Section */}
+      
       <div className="w-full lg:w-96 mt-10 lg:mt-0">
-        <div className="bg-gray-900 text-white p-10 rounded-[3rem] sticky top-24">
+        <div className="bg-yellow-200 text-black p-10 rounded-[3rem] sticky top-24">
           <h2 className="text-2xl font-black mb-8">Summary</h2>
           <div className="flex justify-between text-xl font-black mb-8">
             <span>Total</span>
@@ -97,7 +97,7 @@ const Cart = () => {
               Proceed to Checkout <ArrowRight size={20} />
             </button>
           ) : (
-            // Render Stripe Elements when clientSecret is ready
+            
             clientSecret && (
               <Elements options={{ clientSecret, appearance: { theme: 'night' } }} stripe={stripePromise}>
                 <CheckoutForm amount={subtotal} onSuccess={handleOrderSuccess} />

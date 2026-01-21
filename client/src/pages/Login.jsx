@@ -1,25 +1,25 @@
 import React, { useState, useContext } from 'react';
-import { AuthContext } from '../context/AuthContext'; // Import Context
+import { AuthContext } from '../context/AuthContext'; 
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login } = useContext(AuthContext); // Get login function
+  const { login } = useContext(AuthContext); 
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      // Connect to Member 2's Backend
+      
       const { data } = await axios.post('/api/auth/login', { email, password });
       
-      // Update Global State
+      
       login(data);
       
       alert(`Welcome back, ${data.name}!`);
-      navigate('/'); // Redirect to Home
+      navigate('/'); 
     } catch (err) {
       alert(err.response?.data?.message || "Login failed");
     }

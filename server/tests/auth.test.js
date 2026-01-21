@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const User = require('../src/models/User');
 
 describe('🔐 Auth API Tests', function() {
-  this.timeout(10000); // Give DB time to connect
+  this.timeout(10000); 
 
   // Clean DB before starting
   before(async () => {
@@ -15,7 +15,7 @@ describe('🔐 Auth API Tests', function() {
   // Clean DB after finishing
   after(async () => {
     await User.deleteMany({ email: 'test@example.com' });
-    // Keep connection open for other tests, or close if this is the only file
+    
   });
 
   let userToken;
@@ -31,7 +31,7 @@ describe('🔐 Auth API Tests', function() {
     
     expect(res.status).to.equal(201);
     expect(res.body).to.have.property('token');
-    userToken = res.body.token; // Save token for next test
+    userToken = res.body.token; 
   });
 
   it('should login the registered user', async () => {

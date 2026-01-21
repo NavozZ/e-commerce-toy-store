@@ -14,7 +14,7 @@ import AdminProtectLayout from './components/layouts/AdminProtectLayout';
 import Home from './pages/Home';
 import Products from './pages/Products';
 import Login from './pages/Login';
-import Register from './pages/Register'; // Import the new page
+import Register from './pages/Register'; 
 import Cart from './pages/Cart';
 import Search from './pages/Search';
 import { CartProvider } from './context/CartContext';
@@ -45,7 +45,7 @@ createRoot(document.getElementById("root")).render(
             <Route element={<AdminProtectLayout />}>
               <Route path="admin" element={<AdminDashboard />} />
               <Route path="admin/products" element={<ManageProducts />} />
-            {/* Add more admin pages here like /admin/users or /admin/products */}
+            
             </Route>
 
             <Route element={<ProtectLayout />}>

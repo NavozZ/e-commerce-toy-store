@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { ShoppingBag, Star, Loader2 } from 'lucide-react';
-import { CartContext } from '../context/CartContext'; // Member 3's logic integration
+import { CartContext } from '../context/CartContext'; 
 import { Link } from 'react-router-dom';
 
 const BestSellers = () => {
@@ -9,14 +9,14 @@ const BestSellers = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  // Member 1: Integrate the cart add function
+  
   const { addToCart } = useContext(CartContext);
 
   useEffect(() => {
     const fetchBestSellers = async () => {
       try {
         setLoading(true);
-        // Using the proxy route defined in vite.config.js
+        
         const { data } = await axios.get('/api/products/best-sellers');
         setProducts(data);
       } catch (err) {
@@ -51,14 +51,14 @@ const BestSellers = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {products.map((product) => (
           <div key={product._id} className="group relative bg-white p-6 rounded-[3rem] border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500">
-            {/* Quick Action Overlay */}
+            
             <div className="absolute top-6 right-6 z-10">
               <button className="p-3 bg-white/90 backdrop-blur-md rounded-full shadow-sm hover:bg-blue-600 hover:text-white transition-all text-gray-400">
                 <Star size={20} />
               </button>
             </div>
             
-            {/* Product Image Container */}
+            
             <Link to={`/product/${product._id}`}>
               <div className="aspect-square rounded-[2.5rem] bg-gray-50 overflow-hidden mb-6 relative cursor-pointer">
                 <img 
@@ -69,7 +69,7 @@ const BestSellers = () => {
               </div>
             </Link>
 
-            {/* Product Info */}
+            
             <div className="space-y-4">
               <Link to={`/product/${product._id}`}>
                 <h3 className="font-bold text-xl text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-1 cursor-pointer">
@@ -86,11 +86,11 @@ const BestSellers = () => {
                 </div>
               </div>
               
-              {/* Member 1 & 3 Collaboration: Functional Button */}
+              
               <button 
                 onClick={() => {
                   addToCart(product);
-                  // Optional: Trigger a notification instead of an alert
+                  
                 }}
                 className="w-full flex items-center justify-center gap-3 bg-gray-900 text-white py-4 rounded-3xl font-black hover:bg-blue-600 transition-all active:scale-95 hover:shadow-blue-200 hover:shadow-xl"
               >

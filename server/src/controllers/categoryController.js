@@ -1,6 +1,6 @@
 const Product = require('../models/Product');
 
-// Get categories for the sidebar
+
 exports.getCategories = async (req, res) => {
   try {
     const categories = await Product.distinct('category');
@@ -10,7 +10,7 @@ exports.getCategories = async (req, res) => {
   }
 };
 
-// Filtered Search (Session 5 requirement)
+
 exports.searchProducts = async (req, res) => {
   try {
     const { category, query } = req.query;
@@ -21,7 +21,7 @@ exports.searchProducts = async (req, res) => {
     }
 
     if (query) {
-      filter.name = { $regex: query, $options: 'i' }; // Case-insensitive search
+      filter.name = { $regex: query, $options: 'i' }; 
     }
 
     const products = await Product.find(filter);

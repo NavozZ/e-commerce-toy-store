@@ -8,10 +8,10 @@ const LiveFeed = () => {
   const [alert, setAlert] = useState(null);
 
   useEffect(() => {
-    // Member 4: Listen for store-wide broadcasts
+    
     socket.on('broadcast-alert', (data) => {
       setAlert(data.message);
-      // Auto-hide alert after 8 seconds
+      
       setTimeout(() => setAlert(null), 8000);
     });
 

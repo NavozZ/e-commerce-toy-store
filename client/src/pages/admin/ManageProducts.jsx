@@ -8,12 +8,12 @@ const ManageProducts = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   
-  // ✅ FIX: Changed 'image' to 'imageUrl' to match your Backend Model
+  
   const [formData, setFormData] = useState({ 
     name: '', 
     price: '', 
     category: 'Lego', 
-    imageUrl: '', // Changed name
+    imageUrl: '', 
     description: '' 
   });
 
@@ -74,7 +74,7 @@ const ManageProducts = () => {
                <option value="Art">Art</option>
              </select>
              
-             {/* ✅ FIX: Name attribute and value updated */}
+             
              <input type="text" placeholder="Image URL (imageUrl)" className="w-full p-4 bg-gray-50 rounded-2xl outline-none" 
                onChange={e => setFormData({...formData, imageUrl: e.target.value})} value={formData.imageUrl} required />
              

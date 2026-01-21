@@ -17,18 +17,17 @@ const CheckoutForm = ({ amount, onSuccess }) => {
     const { error, paymentIntent } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        // Return URL is not needed if we handle success inline, 
-        // but Stripe requires redirect: 'if_required' for single-page apps usually.
+        
         return_url: window.location.origin, 
       },
-      redirect: "if_required", // Important to stop auto-redirect
+      redirect: "if_required", 
     });
 
     if (error) {
       setMessage(error.message);
     } else if (paymentIntent && paymentIntent.status === "succeeded") {
       setMessage("Payment Successful! 🎉");
-      onSuccess(paymentIntent.id); // Call parent function to save order
+      onSuccess(paymentIntent.id); 
     }
 
     setIsLoading(false);

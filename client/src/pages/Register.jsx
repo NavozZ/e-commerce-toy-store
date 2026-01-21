@@ -13,7 +13,7 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      // ✅ FIX: Sending 'name' to match backend
+      
       const { data } = await axios.post('/api/auth/register', { name, email, password });
       login(data);
       alert('Registration Successful!');

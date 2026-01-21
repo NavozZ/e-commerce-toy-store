@@ -1,17 +1,15 @@
 const Stripe = require('stripe');
 
-// @desc    Create Payment Intent
-// @route   POST /api/payment/create-payment-intent
+
 exports.createPaymentIntent = async (req, res) => {
-  // 1. Initialize Stripe INSIDE the function (Lazy Loading)
-  // This ensures dotenv has time to load the key first.
+  
   const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
   const { amount } = req.body;
 
   try {
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(amount * 100), // Ensure it's an integer (cents)
+      amount: Math.round(amount * 100), 
       currency: 'usd',
       automatic_payment_methods: {
         enabled: true,

@@ -3,13 +3,12 @@ import { Github, Twitter, Instagram } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white py-16 mt-20">
+    <footer className="bg-yellow-200 text-black py-16 mt-20">
       <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 border-b border-gray-800 pb-12">
         <div className="space-y-4">
           <h3 className="text-2xl font-black text-blue-400 tracking-tighter">Bunny & Bark 🐾</h3>
-          <p className="text-gray-400 text-sm leading-relaxed">
-            University of Plymouth Group 16 Project.<br/> 
-            Building joy, one toy at a time.
+          <p className="text-black-400 text-sm leading-relaxed">
+            Inspiring creativity and joy through toys for every child.
           </p>
         </div>
         <div className="flex gap-10">

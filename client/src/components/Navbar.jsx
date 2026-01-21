@@ -24,10 +24,10 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-100">
+    <nav className="bg-yellow-200 shadow-sm sticky top-0 z-50 border-b border-gray-100">
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
 
-        {/* Logo */}
+        
         <Link
           to="/"
           className="text-2xl font-black text-blue-600 tracking-tighter flex items-center gap-2"
@@ -35,24 +35,19 @@ const Navbar = () => {
           Bunny & Bark 🐾
         </Link>
 
-        {/* Categories */}
+        
         <div className="hidden md:flex items-center gap-8 text-sm font-bold uppercase tracking-widest text-gray-500">
           <Link
             to="/products"
             className="hover:text-blue-600 flex items-center gap-2"
           >
-            <LayoutGrid size={16} /> Shop
+            <LayoutGrid size={16} /> Shop All
           </Link>
 
-          <Link
-            to="/search?category=Lego"
-            className="hover:text-blue-600 flex items-center gap-2"
-          >
-            <ToyBrick size={16} /> Blocks
-          </Link>
+          
         </div>
 
-        {/* Right Side */}
+        
         <div className="flex items-center gap-5">
           <Link to="/search" className="text-gray-400 hover:text-blue-600">
             <Search size={20} />
@@ -64,7 +59,7 @@ const Navbar = () => {
                 Hi, {user.name}
               </span>
 
-              {/* 🔐 Admin Panel Button (Admins only) */}
+              
               {user.isAdmin && (
                 <Link
                   to="/admin"

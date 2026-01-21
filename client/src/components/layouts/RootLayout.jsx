@@ -7,11 +7,11 @@ import Footer from '../Footer';
 const RootLayout = () => {
   return (
     <div className="min-h-screen bg-gray-50 pb-20 md:pb-0 font-sans">
-      {/* Persistent UI Elements */}
+      
       <LiveFeed />
       <Navbar />
       
-      {/* Page Content Renders Here */}
+      
       <main>
         <Outlet />
       </main>

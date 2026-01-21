@@ -1,8 +1,6 @@
 const Order = require('../models/Order');
 
-// @desc    Create new order
-// @route   POST /api/orders
-// @access  Private
+
 exports.createOrder = async (req, res) => {
   const { orderItems, shippingAddress, totalPrice } = req.body;
 
@@ -22,7 +20,7 @@ exports.createOrder = async (req, res) => {
 
     const createdOrder = await order.save();
 
-    // 🔔 Socket.IO broadcast after order creation
+   
     const io = req.app.get('socketio');
     if (io) {
       io.emit('broadcast-alert', {
@@ -38,9 +36,7 @@ exports.createOrder = async (req, res) => {
   }
 };
 
-// @desc    Get logged in user orders
-// @route   GET /api/orders/myorders
-// @access  Private
+
 exports.getMyOrders = async (req, res) => {
   try {
     const orders = await Order.find({ user: req.user._id });

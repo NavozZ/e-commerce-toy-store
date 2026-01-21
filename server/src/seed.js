@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const connectDB = require('./infrastructure/db'); // Ensure this path matches your folder structure
+const connectDB = require('./infrastructure/db'); 
 const Product = require('./models/Product');
 const User = require('./models/User');
 
@@ -19,7 +19,7 @@ const importData = async () => {
       {
         name: 'Admin User',
         email: 'admin@example.com',
-        password: '123', // Will be hashed if your User model has the pre-save hook
+        password: '123', 
         isAdmin: true,
       },
       {
@@ -30,9 +30,9 @@ const importData = async () => {
       },
     ]);
 
-    const adminUser = createdUsers[0]._id; // Get the Admin's ID to link to products
+    const adminUser = createdUsers[0]._id; 
 
-    // 3. CREATE PRODUCTS (With 'imageUrl' and correct Categories)
+   
     const sampleProducts = [
       {
         user: adminUser,

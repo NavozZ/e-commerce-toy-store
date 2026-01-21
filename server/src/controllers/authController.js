@@ -6,7 +6,7 @@ const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET || 'secret_key', { expiresIn: '30d' });
 };
 
-// POST /api/auth/register
+
 exports.registerUser = async (req, res) => {
   const { name, email, password } = req.body;
   try {
@@ -14,13 +14,13 @@ exports.registerUser = async (req, res) => {
       return res.status(400).json({ message: 'Please add all fields' });
     }
 
-    // Check existing user
+    
     const userExists = await User.findOne({ email });
     if (userExists) {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    // ✅ FIX: Send plain password. The User model handles hashing.
+    
     const user = await User.create({ name, email, password });
 
     if (user) {
@@ -38,7 +38,7 @@ exports.registerUser = async (req, res) => {
   }
 };
 
-// POST /api/auth/login
+
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -47,7 +47,7 @@ exports.loginUser = async (req, res) => {
     if (user && (await bcrypt.compare(password, user.password))) {
       res.json({
         _id: user.id,
-        name: user.name, // ✅ FIX: Must match database field 'name'
+        name: user.name, 
         email: user.email,
         isAdmin: user.isAdmin,
         token: generateToken(user.id),

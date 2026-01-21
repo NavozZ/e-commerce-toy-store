@@ -16,7 +16,7 @@ const Search = () => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        // Construct URL: /api/products OR /api/products?category=Lego
+        
         let url = '/api/products';
         if (categoryQuery) {
           url += `?category=${categoryQuery}`;
@@ -32,7 +32,7 @@ const Search = () => {
     };
 
     fetchProducts();
-  }, [categoryQuery]); // Re-run whenever the category changes
+  }, [categoryQuery]); 
 
   return (
     <div className="max-w-350 mx-auto px-6 py-10">

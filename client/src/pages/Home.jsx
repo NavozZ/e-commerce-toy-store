@@ -13,16 +13,10 @@ const Home = () => {
     <main className="min-h-screen bg-white">
 
       <div className="max-w-350 mx-auto px-4 md:px-8 space-y-20 pb-20">
-        {/* Welcome & Brand Story [Member 1 & 6] */}
+        
         <Hero />
-        
-        {/* Navigation by Categories [Member 5] */}
-        <Categories />
-        
-        {/* Brand Mission [Leader] */}
+        <Categories />       
         <About />
-        
-        {/* Dynamic Database Products [Member 1] */}
         <BestSellers />
       </div>
     </main>

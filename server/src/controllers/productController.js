@@ -3,10 +3,10 @@ const Product = require('../models/Product');
 // Get all toys
 exports.getAllProducts = async (req, res) => {
   try {
-    const { category } = req.query; // Get category from URL
+    const { category } = req.query; 
     let query = {};
 
-    // If a category is provided, filter by it
+    
     if (category) {
       query.category = category;
     }
@@ -31,10 +31,10 @@ exports.getProductById = async (req, res) => {
   }
 };
 
-// @desc    Get best sellers
+//     Get best sellers
 exports.getBestSellers = async (req, res) => {
   try {
-    const products = await Product.find({}).limit(4); // Simulating best sellers
+    const products = await Product.find({}).limit(4); 
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -46,18 +46,18 @@ exports.createProduct = async (req, res) => {
 
   try {
     const product = new Product({
-      user: req.user._id, // Links to admin
+      user: req.user._id, 
       name,
       price,
       description,
-      imageUrl, // ✅ Matches the model field
+      imageUrl, 
       category,
       countInStock: 10
     });
 
     const createdProduct = await product.save();
 
-    // Member 4: Broadcast to live feed
+    
     const io = req.app.get('socketio');
     if (io) {
       io.emit('broadcast-alert', { 
@@ -71,7 +71,7 @@ exports.createProduct = async (req, res) => {
   }
 };
 
-// @desc    Update a product (Admin Only)
+
 exports.updateProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
@@ -92,7 +92,7 @@ exports.updateProduct = async (req, res) => {
   }
 };
 
-// @desc    Delete a product (Admin Only)
+
 exports.deleteProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
