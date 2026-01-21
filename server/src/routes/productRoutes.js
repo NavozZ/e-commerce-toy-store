@@ -16,5 +16,6 @@ router.get('/best-sellers', async (req, res) => {
     res.status(500).json({ error: "Failed to fetch best sellers" });
   }
 });
+router.get('/:id', getProductById);
 
 module.exports = router;

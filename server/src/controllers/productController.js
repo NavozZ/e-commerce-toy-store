@@ -10,6 +10,16 @@ exports.getAllProducts = async (req, res) => {
   }
 };
 
+// Get single product by ID
+exports.getProductById = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (product) res.json(product);
+    else res.status(404).json({ message: 'Toy not found' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 exports.createProduct = async (req, res) => {
   try {
