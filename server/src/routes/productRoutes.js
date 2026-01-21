@@ -1,21 +1,27 @@
 const express = require('express');
 const router = express.Router();
-const productController = require('../controllers/productController'); //
-const Product = require('../models/Product');
+const { 
+  getAllProducts, 
+  getProductById, 
+  getBestSellers,
+  createProduct, 
+  updateProduct, 
+  deleteProduct 
+} = require('../controllers/productController');
+const { protect, admin } = require('../middleware/authMiddleware');
 
-// Handler for 'Shop All' page (GET /api/products)
-router.get('/', productController.getAllProducts);
+// 1. General routes
+router.route('/')
+  .get(getAllProducts)
+  .post(protect, admin, createProduct);
 
-// Handler for 'Best Sellers' on Home page (GET /api/products/best-sellers)
-router.get('/best-sellers', async (req, res) => {
-  try {
-    const bestSellers = await Product.find({ isFeatured: true }).limit(4);
-    res.status(200).json(bestSellers);
-  } catch (err) {
-    console.error("Database Error:", err);
-    res.status(500).json({ error: "Failed to fetch best sellers" });
-  }
-});
-router.get('/:id', getProductById);
+// 2. Specialized routes (must be above /:id)
+router.get('/best-sellers', getBestSellers);
+
+// 3. ID specific routes
+router.route('/:id')
+  .get(getProductById)
+  .put(protect, admin, updateProduct)
+  .delete(protect, admin, deleteProduct);
 
 module.exports = router;

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import { Bell, Sparkles, X } from 'lucide-react';
 
-const socket = io('http://localhost:5000'); // Connect to Member 4's backend
+const socket = io('/'); // Connect to Member 4's backend
 
 const LiveFeed = () => {
   const [alert, setAlert] = useState(null);
