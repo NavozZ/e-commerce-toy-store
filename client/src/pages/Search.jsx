@@ -35,7 +35,7 @@ const Search = () => {
   }, [categoryQuery]); // Re-run whenever the category changes
 
   return (
-    <div className="max-w-[1400px] mx-auto px-6 py-10">
+    <div className="max-w-350 mx-auto px-6 py-10">
       <div className="flex justify-between items-end mb-10">
         <h1 className="text-4xl font-black text-gray-800">
           {categoryQuery ? `${categoryQuery} Collection` : 'All Toys'}

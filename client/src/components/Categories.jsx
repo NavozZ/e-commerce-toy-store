@@ -20,7 +20,7 @@ const Categories = () => {
           <Link 
             key={cat.name} 
             to={`/search?category=${cat.name}`} 
-            className="flex flex-col items-center gap-4 p-8 rounded-[2rem] bg-white border border-gray-100 hover:border-blue-200 hover:shadow-lg transition-all group"
+            className="flex flex-col items-center gap-4 p-8 rounded-4xl bg-white border border-gray-100 hover:border-blue-200 hover:shadow-lg transition-all group"
           >
             <div className={`p-4 rounded-2xl ${cat.color} group-hover:scale-110 transition-transform`}>
               {cat.icon}
