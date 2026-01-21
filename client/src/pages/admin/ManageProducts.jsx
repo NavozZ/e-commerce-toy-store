@@ -51,7 +51,7 @@ const ManageProducts = () => {
   };
 
   return (
-    <div className="max-w-[1400px] mx-auto px-6 py-10">
+    <div className="max-w-350 mx-auto px-6 py-10">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100 h-fit">
           <h2 className="text-2xl font-black mb-6">List New Toy</h2>

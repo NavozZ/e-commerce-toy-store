@@ -20,6 +20,7 @@ import Search from './pages/Search';
 import { CartProvider } from './context/CartContext';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import ManageProducts from './pages/admin/ManageProducts';
+import ProductDetails from './pages/ProductDetails';
 
 const NotFound = () => (
   <div className="text-center py-20 text-2xl font-bold text-gray-500">
@@ -38,7 +39,8 @@ createRoot(document.getElementById("root")).render(
             <Route path="products" element={<Products />} />
             <Route path="search" element={<Search />} />
             <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} /> {/* Add this line */}
+            <Route path="register" element={<Register />} />
+            <Route path="product/:id" element={<ProductDetails />} />
 
             <Route element={<AdminProtectLayout />}>
               <Route path="admin" element={<AdminDashboard />} />

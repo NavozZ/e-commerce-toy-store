@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { ShoppingBag, Star, Loader2 } from 'lucide-react';
 import { CartContext } from '../context/CartContext'; // Member 3's logic integration
+import { Link } from 'react-router-dom';
 
 const BestSellers = () => {
   const [products, setProducts] = useState([]);
@@ -58,22 +59,23 @@ const BestSellers = () => {
             </div>
             
             {/* Product Image Container */}
-            <div className="aspect-square rounded-[2.5rem] bg-gray-50 overflow-hidden mb-6 relative">
-              <img 
-                src={product.image} 
-                alt={product.name} 
-                className="w-full h-full object-contain p-10 group-hover:scale-110 transition-transform duration-700"
-              />
-              {/* Sold Out logic could go here */}
-            </div>
+            <Link to={`/product/${product._id}`}>
+              <div className="aspect-square rounded-[2.5rem] bg-gray-50 overflow-hidden mb-6 relative cursor-pointer">
+                <img 
+                  src={product.imageUrl || product.image} 
+                  alt={product.name} 
+                  className="w-full h-full object-contain p-10 group-hover:scale-110 transition-transform duration-700"
+                />
+              </div>
+            </Link>
 
             {/* Product Info */}
             <div className="space-y-4">
-              <div className="flex justify-between items-start">
-                <h3 className="font-bold text-xl text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-1">
+              <Link to={`/product/${product._id}`}>
+                <h3 className="font-bold text-xl text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-1 cursor-pointer">
                   {product.name}
                 </h3>
-              </div>
+              </Link>
               
               <div className="flex items-center justify-between">
                 <p className="text-blue-600 font-black text-3xl">${product.price}</p>
