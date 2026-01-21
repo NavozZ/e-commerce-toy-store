@@ -3,7 +3,15 @@ const Product = require('../models/Product');
 // Get all toys
 exports.getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find({});
+    const { category } = req.query; // Get category from URL
+    let query = {};
+
+    // If a category is provided, filter by it
+    if (category) {
+      query.category = category;
+    }
+
+    const products = await Product.find(query);
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: error.message });

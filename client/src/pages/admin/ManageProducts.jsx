@@ -60,6 +60,19 @@ const ManageProducts = () => {
                onChange={e => setFormData({...formData, name: e.target.value})} value={formData.name} required />
              <input type="number" placeholder="Price" className="w-full p-4 bg-gray-50 rounded-2xl outline-none" 
                onChange={e => setFormData({...formData, price: e.target.value})} value={formData.price} required />
+             <select 
+               className="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500" 
+               value={formData.category} 
+               onChange={e => setFormData({...formData, category: e.target.value})} 
+               required
+               >
+               <option value="Lego">Lego</option>
+               <option value="Vehicles">Vehicles</option>
+               <option value="Animals">Animals</option>
+               <option value="Gaming">Gaming</option>
+               <option value="Baby">Baby</option>
+               <option value="Art">Art</option>
+             </select>
              
              {/* ✅ FIX: Name attribute and value updated */}
              <input type="text" placeholder="Image URL (imageUrl)" className="w-full p-4 bg-gray-50 rounded-2xl outline-none" 
