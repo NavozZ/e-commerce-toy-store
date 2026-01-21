@@ -34,17 +34,17 @@ exports.getBestSellers = async (req, res) => {
 };
 
 exports.createProduct = async (req, res) => {
-  const { name, price, description, image, category, countInStock } = req.body;
+  const { name, price, description, imageUrl, category } = req.body;
 
   try {
     const product = new Product({
-      user: req.user._id, // ✅ CRITICAL: Linking product to the Admin user
+      user: req.user._id, // Links to admin
       name,
       price,
       description,
-      image,
+      imageUrl, // ✅ Matches the model field
       category,
-      countInStock: countInStock || 10,
+      countInStock: 10
     });
 
     const createdProduct = await product.save();
@@ -53,13 +53,12 @@ exports.createProduct = async (req, res) => {
     const io = req.app.get('socketio');
     if (io) {
       io.emit('broadcast-alert', { 
-        message: `✨ NEW ARRIVAL: ${name} added to the collection!` 
+        message: `✨ NEW TOY: ${name} is now available!` 
       });
     }
 
     res.status(201).json(createdProduct);
   } catch (error) {
-    console.error("Product Creation Error:", error.message); // Log to see specific missing fields
     res.status(400).json({ message: error.message });
   }
 };
