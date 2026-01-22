@@ -33,7 +33,8 @@ app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/orders', require('./routes/orderRoutes'));     
 app.use('/api/search', require('./routes/searchRoutes'));
 app.use('/api/categories', require('./routes/categoryRoutes'));
-app.use('/api/announcements', require('./routes/announcementRoutes'));   
+app.use('/api/announcements', require('./routes/announcementRoutes')); 
+app.use('/api/cart', require('./routes/cartRoutes'));  
 app.use('/api/payment', paymentRoutes);                      
 
 // 5. WebSocket Logic 
