@@ -1,32 +1,33 @@
-const Product = require('../models/Product');
+const Category = require('../models/Category');
 
-
+// @desc    Get all categories (Read)
 exports.getCategories = async (req, res) => {
   try {
-    const categories = await Product.distinct('category');
+    const categories = await Category.find({});
     res.json(categories);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
-
-exports.searchProducts = async (req, res) => {
+// @desc    Create a category (Create)
+exports.createCategory = async (req, res) => {
   try {
-    const { category, query } = req.query;
-    let filter = {};
+    const { name, icon, color } = req.body;
+    const category = new Category({ name, icon, color });
+    const savedCategory = await category.save();
+    res.status(201).json(savedCategory);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
 
-    if (category && category !== 'All') {
-      filter.category = category;
-    }
-
-    if (query) {
-      filter.name = { $regex: query, $options: 'i' }; 
-    }
-
-    const products = await Product.find(filter);
-    res.json(products);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+// @desc    Delete a category (Delete)
+exports.deleteCategory = async (req, res) => {
+  try {
+    await Category.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Category removed' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };

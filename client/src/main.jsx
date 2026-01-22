@@ -21,6 +21,7 @@ import { CartProvider } from './context/CartContext';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import ManageProducts from './pages/admin/ManageProducts';
 import ProductDetails from './pages/ProductDetails';
+import ManageCategories from './pages/admin/ManageCategories';
 
 const NotFound = () => (
   <div className="text-center py-20 text-2xl font-bold text-gray-500">
@@ -45,6 +46,7 @@ createRoot(document.getElementById("root")).render(
             <Route element={<AdminProtectLayout />}>
               <Route path="admin" element={<AdminDashboard />} />
               <Route path="admin/products" element={<ManageProducts />} />
+              <Route path="admin/categories" element={<ManageCategories />} />
             
             </Route>
 

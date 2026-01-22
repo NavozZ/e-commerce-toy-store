@@ -31,7 +31,8 @@ app.use(express.json());
 app.use('/api/auth', require('./routes/authRoutes'));      
 app.use('/api/products', require('./routes/productRoutes')); 
 app.use('/api/orders', require('./routes/orderRoutes'));     
-app.use('/api/search', require('./routes/searchRoutes'));    
+app.use('/api/search', require('./routes/searchRoutes'));
+app.use('/api/categories', require('./routes/categoryRoutes'));   
 app.use('/api/payment', paymentRoutes);                      
 
 // 5. WebSocket Logic 
