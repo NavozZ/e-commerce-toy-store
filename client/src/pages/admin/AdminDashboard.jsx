@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { PackagePlus, Users, ShoppingCart, LayoutDashboard, Tag, ReceiptText } from 'lucide-react';
+import { PackagePlus, Users, ShoppingCart, LayoutDashboard, Tag, ReceiptText, Megaphone } from 'lucide-react';
 
 const AdminDashboard = () => {
   const stats = [
@@ -29,7 +29,7 @@ const AdminDashboard = () => {
       </div>
 
       <h2 className="text-2xl font-bold mb-6 text-gray-800">Operational Controls</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         
         {/* Member 1: Product Management */}
         <Link to="/admin/products" className="group bg-gray-900 text-white p-8 rounded-[2.5rem] hover:bg-blue-600 transition-all shadow-xl">
@@ -50,6 +50,13 @@ const AdminDashboard = () => {
           <ReceiptText className="mb-4 text-green-500" size={40} />
           <h2 className="text-2xl font-black mb-2 text-gray-900">Orders</h2>
           <p className="text-gray-500">Track customer transactions and payment statuses.</p>
+        </Link>
+
+        {/* ✅ Member 4: Announcement Hub (Janidu) */}
+        <Link to="/admin/announcements" className="group bg-amber-500 text-white p-8 rounded-[2.5rem] hover:bg-amber-600 transition-all shadow-xl">
+          <Megaphone className="mb-4 text-white" size={40} />
+          <h2 className="text-2xl font-black mb-2">Announcements</h2>
+          <p className="text-amber-100">Broadcast real-time alerts and news to all users.</p>
         </Link>
 
       </div>
