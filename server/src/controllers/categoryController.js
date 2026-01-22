@@ -31,3 +31,20 @@ exports.deleteCategory = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+exports.updateCategory = async (req, res) => {
+  try {
+    const { name } = req.body;
+    const category = await Category.findById(req.params.id);
+
+    if (category) {
+      category.name = name || category.name;
+      const updatedCategory = await category.save();
+      res.json(updatedCategory);
+    } else {
+      res.status(404).json({ message: 'Category not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
