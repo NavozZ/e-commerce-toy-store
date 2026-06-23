@@ -9,6 +9,20 @@
   --color-success-hover: #059669;
   --color-bg-cream: #FAF9F6;
   --color-brand-green: #34D399;
+
+  --animate-wiggle: wiggle 0.5s ease-in-out;
+  --animate-confetti: confetti 3s ease-out forwards;
+
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(-12deg) scale(1.2); }
+    75% { transform: rotate(12deg) scale(1.2); }
+  }
+
+  @keyframes confetti {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(80vh) rotate(360deg); opacity: 0; }
+  }
 }
 
 @utility bg-toy-gradient {

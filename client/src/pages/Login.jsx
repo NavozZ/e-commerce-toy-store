@@ -12,12 +12,8 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      
       const { data } = await axios.post('/api/auth/login', { email, password });
-      
-      
       login(data);
-      
       alert(`Welcome back, ${data.name}!`);
       navigate('/'); 
     } catch (err) {
@@ -26,28 +22,28 @@ const Login = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-20 p-8 bg-yellow-200 rounded-3xl shadow-xl">
-      <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Welcome Back</h2>
+    <div className="max-w-md mx-auto mt-20 p-10 bg-white border border-gray-100 rounded-[2.5rem] shadow-xl">
+      <h2 className="text-3xl font-black mb-8 text-center text-gray-800">Welcome Back</h2>
       <form onSubmit={handleLogin} className="space-y-4">
         <input 
           type="email" 
           placeholder="Email" 
-          className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:border-blue-500 outline-none"
+          className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary outline-none"
           onChange={e => setEmail(e.target.value)} 
         />
         <input 
           type="password" 
           placeholder="Password" 
-          className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:border-blue-500 outline-none"
+          className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary outline-none"
           onChange={e => setPassword(e.target.value)} 
         />
-        <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold transition-all">
+        <button className="w-full bg-primary hover:bg-primary-hover text-white py-4 rounded-full font-black transition-all cursor-pointer shadow-lg hover:shadow-primary/20">
           Sign In
         </button>
       </form>
       <div className="mt-6 text-center text-sm text-gray-500">
         <p>Don't have an account?</p>
-        <Link to="/register" className="text-blue-600 font-bold hover:underline">
+        <Link to="/register" className="text-primary font-black hover:underline mt-1 inline-block">
           Create an account here
         </Link>
       </div>

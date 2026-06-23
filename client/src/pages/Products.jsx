@@ -17,24 +17,22 @@ const Products = () => {
   }, []);
 
   return (
-    <div className="max-w-350 mx-auto px-6 py-10">
+    <div className="max-w-7xl mx-auto px-6 py-10">
       <h1 className="text-4xl font-black mb-10 text-gray-800">Explore Our Toys 🎠</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {products.map((product) => (
-          <div key={product._id} className="bg-white p-6 rounded-[2.5rem] shadow-sm hover:shadow-xl transition-all group border border-gray-100">
-            
-            
+          <div key={product._id} className="group bg-white p-6 rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:scale-105 transition-all duration-300 border border-gray-100 flex flex-col justify-between">
             <Link to={`/product/${product._id}`}>
               <div className="cursor-pointer">
-                <img src={product.imageUrl || product.image} alt={product.name} className="w-full h-48 object-contain mb-4 group-hover:scale-110 transition-transform" />
-                <h3 className="font-bold text-lg mb-1 hover:text-blue-600 transition-colors">{product.name}</h3>
-                <p className="text-blue-600 font-black text-xl mb-4">${product.price}</p>
+                <img src={product.imageUrl || product.image} alt={product.name} className="w-full h-48 object-contain mb-4 group-hover:scale-110 transition-transform duration-500" />
+                <h3 className="font-bold text-lg mb-1 group-hover:text-primary hover:text-primary transition-colors line-clamp-1">{product.name}</h3>
+                <p className="text-primary font-black text-xl mb-4">${product.price}</p>
               </div>
             </Link>
 
             <button 
               onClick={() => addToCart(product)}
-              className="w-full flex items-center justify-center gap-2 bg-gray-900 text-white py-3 rounded-2xl font-bold hover:bg-blue-600 transition-colors"
+              className="w-full flex items-center justify-center gap-2 bg-gray-900 text-white py-3 rounded-full font-black hover:bg-primary hover:shadow-primary/20 hover:shadow-lg transition-all cursor-pointer mt-2"
             >
               <ShoppingBag size={18} /> Add to Bag
             </button>

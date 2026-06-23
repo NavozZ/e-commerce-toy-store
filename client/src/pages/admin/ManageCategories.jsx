@@ -21,14 +21,13 @@ const ManageCategories = () => {
     e.preventDefault();
     try {
       await axios.post('/api/categories', 
-        { name, icon: 'Tag', color: 'bg-purple-50 text-purple-600' },
+        { name, icon: 'Tag', color: 'bg-primary/10 text-primary' },
         { headers: { Authorization: `Bearer ${user.token}` } }
       );
       setName('');
       fetchCategories();
     } catch (err) { alert(err.message); }
   };
-
 
   const updateHandler = async (id) => {
     try {
@@ -63,20 +62,20 @@ const ManageCategories = () => {
           onChange={(e) => setName(e.target.value)}
           required
         />
-        <button className="bg-black text-white px-8 rounded-xl font-bold flex items-center gap-2">
+        <button className="bg-primary hover:bg-primary-hover text-white px-8 py-4 rounded-full font-black flex items-center gap-2 cursor-pointer shadow-lg hover:shadow-primary/20">
           <Plus size={20} /> Create
         </button>
       </form>
 
       <div className="grid grid-cols-1 gap-4">
         {categories.map((cat) => (
-          <div key={cat._id} className="flex justify-between items-center p-5 bg-white rounded-2xl shadow-sm border border-gray-100">
+          <div key={cat._id} className="flex justify-between items-center p-5 bg-white rounded-[2rem] shadow-sm border border-gray-100">
             <div className="flex items-center gap-4 flex-1">
-              <div className="p-3 rounded-lg bg-purple-50 text-purple-600"><Tag size={20}/></div>
+              <div className="p-3 rounded-full bg-primary/10 text-primary"><Tag size={20}/></div>
               
               {editingId === cat._id ? (
                 <input 
-                  className="font-bold text-lg p-2 bg-gray-50 rounded-lg w-full outline-purple-500"
+                  className="font-bold text-lg p-2 bg-gray-50 rounded-lg w-full outline-primary"
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
                   autoFocus
@@ -89,13 +88,13 @@ const ManageCategories = () => {
             <div className="flex gap-2 ml-4">
               {editingId === cat._id ? (
                 <>
-                  <button onClick={() => updateHandler(cat._id)} className="text-green-500 p-2 hover:bg-green-50 rounded-lg"><Check size={20}/></button>
-                  <button onClick={() => setEditingId(null)} className="text-gray-400 p-2 hover:bg-gray-50 rounded-lg"><X size={20}/></button>
+                  <button onClick={() => updateHandler(cat._id)} className="text-success p-2 hover:bg-success/10 rounded-full cursor-pointer"><Check size={20}/></button>
+                  <button onClick={() => setEditingId(null)} className="text-gray-400 p-2 hover:bg-gray-50 rounded-full cursor-pointer"><X size={20}/></button>
                 </>
               ) : (
                 <>
-                  <button onClick={() => {setEditingId(cat._id); setEditName(cat.name);}} className="text-blue-400 p-2 hover:bg-blue-50 rounded-lg"><Edit3 size={18} /></button>
-                  <button onClick={() => deleteHandler(cat._id)} className="text-red-400 p-2 hover:bg-red-50 rounded-lg"><Trash2 size={18} /></button>
+                  <button onClick={() => {setEditingId(cat._id); setEditName(cat.name);}} className="text-primary p-2 hover:bg-primary/10 rounded-full cursor-pointer"><Edit3 size={18} /></button>
+                  <button onClick={() => deleteHandler(cat._id)} className="text-rose-400 p-2 hover:bg-rose-50 rounded-full cursor-pointer"><Trash2 size={18} /></button>
                 </>
               )}
             </div>

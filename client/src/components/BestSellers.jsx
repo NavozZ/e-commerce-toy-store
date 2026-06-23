@@ -9,14 +9,12 @@ const BestSellers = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  
   const { addToCart } = useContext(CartContext);
 
   useEffect(() => {
     const fetchBestSellers = async () => {
       try {
         setLoading(true);
-        
         const { data } = await axios.get('/api/products/best-sellers');
         setProducts(data);
       } catch (err) {
@@ -30,11 +28,11 @@ const BestSellers = () => {
 
   if (loading) return (
     <div className="flex justify-center py-20">
-      <Loader2 className="animate-spin text-blue-600" size={40} />
+      <Loader2 className="animate-spin text-primary" size={40} />
     </div>
   );
 
-  if (error) return <div className="text-red-500 p-10 text-center font-bold">Failed to load best sellers: {error}</div>;
+  if (error) return <div className="text-rose-500 p-10 text-center font-bold">Failed to load best sellers: {error}</div>;
 
   return (
     <section className="py-10">
@@ -43,21 +41,20 @@ const BestSellers = () => {
           <h2 className="text-4xl font-black tracking-tight text-gray-900 mb-4">Best Sellers 🔥</h2>
           <p className="text-gray-500 font-medium text-lg">Our most loved toys, according to you!</p>
         </div>
-        <button className="text-blue-600 font-black hover:text-black transition-colors uppercase text-sm tracking-widest border-b-2 border-blue-600 pb-1">
+        <Link to="/products" className="text-primary font-black hover:text-black transition-colors uppercase text-sm tracking-widest border-b-2 border-primary pb-1">
           View All Products
-        </button>
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {products.map((product) => (
-          <div key={product._id} className="group relative bg-white p-6 rounded-[3rem] border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500">
+          <div key={product._id} className="group relative bg-white p-6 rounded-[3rem] border border-gray-100 shadow-sm hover:shadow-2xl hover:scale-105 transition-all duration-300">
             
             <div className="absolute top-6 right-6 z-10">
-              <button className="p-3 bg-white/90 backdrop-blur-md rounded-full shadow-sm hover:bg-blue-600 hover:text-white transition-all text-gray-400">
+              <button className="p-3 bg-white/90 backdrop-blur-md rounded-full shadow-sm hover:bg-primary hover:text-white transition-all text-gray-400">
                 <Star size={20} />
               </button>
             </div>
-            
             
             <Link to={`/product/${product._id}`}>
               <div className="aspect-square rounded-[2.5rem] bg-gray-50 overflow-hidden mb-6 relative cursor-pointer">
@@ -69,30 +66,25 @@ const BestSellers = () => {
               </div>
             </Link>
 
-            
             <div className="space-y-4">
               <Link to={`/product/${product._id}`}>
-                <h3 className="font-bold text-xl text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-1 cursor-pointer">
+                <h3 className="font-bold text-xl text-gray-900 group-hover:text-primary transition-colors line-clamp-1 cursor-pointer">
                   {product.name}
                 </h3>
               </Link>
               
               <div className="flex items-center justify-between">
-                <p className="text-blue-600 font-black text-3xl">${product.price}</p>
-                <div className="flex text-amber-400 gap-0.5">
+                <p className="text-primary font-black text-3xl">${product.price}</p>
+                <div className="flex text-secondary gap-0.5">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} size={12} fill="currentColor" />
                   ))}
                 </div>
               </div>
               
-              
               <button 
-                onClick={() => {
-                  addToCart(product);
-                  
-                }}
-                className="w-full flex items-center justify-center gap-3 bg-gray-900 text-white py-4 rounded-3xl font-black hover:bg-blue-600 transition-all active:scale-95 hover:shadow-blue-200 hover:shadow-xl"
+                onClick={() => addToCart(product)}
+                className="w-full flex items-center justify-center gap-3 bg-gray-900 text-white py-4 rounded-full font-black hover:bg-primary transition-all active:scale-95 hover:shadow-primary/20 hover:shadow-xl cursor-pointer"
               >
                 <ShoppingBag size={20} />
                 Add to Bag

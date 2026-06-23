@@ -23,6 +23,7 @@ import ManageProducts from './pages/admin/ManageProducts';
 import ProductDetails from './pages/ProductDetails';
 import ManageCategories from './pages/admin/ManageCategories';
 import ManageAnnouncements from './pages/admin/ManageAnnouncements';
+import Account from './pages/Account';
 
 const NotFound = () => (
   <div className="text-center py-20 text-2xl font-bold text-gray-500">
@@ -54,6 +55,7 @@ createRoot(document.getElementById("root")).render(
 
             <Route element={<ProtectLayout />}>
               <Route path="cart" element={<Cart />} />
+              <Route path="account" element={<Account />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />

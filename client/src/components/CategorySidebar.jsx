@@ -5,7 +5,7 @@ const CategorySidebar = ({ onFilterChange }) => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/search/categories')
+    axios.get('/api/search/categories')
       .then(res => setCategories(['All', ...res.data]))
       .catch(err => console.error(err));
   }, []);
@@ -17,7 +17,7 @@ const CategorySidebar = ({ onFilterChange }) => {
         {categories.map(cat => (
           <li 
             key={cat} 
-            className="cursor-pointer hover:text-blue-600 mb-2"
+            className="cursor-pointer hover:text-primary mb-2 transition-colors"
             onClick={() => onFilterChange(cat)}
           >
             {cat}

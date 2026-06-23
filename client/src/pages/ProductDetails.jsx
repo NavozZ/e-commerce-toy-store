@@ -22,7 +22,7 @@ const ProductDetails = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-20">
-      <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-gray-400 hover:text-blue-600 mb-10 font-bold transition-colors">
+      <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-gray-400 hover:text-primary mb-10 font-bold transition-colors cursor-pointer">
         <ArrowLeft size={20} /> Back to Catalog
       </button>
       
@@ -33,23 +33,23 @@ const ProductDetails = () => {
         
         <div className="space-y-8">
           <div>
-            <span className="bg-blue-50 text-blue-600 px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest">{product.category}</span>
+            <span className="bg-primary/10 text-primary px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest">{product.category}</span>
             <h1 className="text-5xl font-black text-gray-900 mt-4">{product.name}</h1>
           </div>
           
           <p className="text-gray-500 leading-relaxed text-lg">{product.description || "A wonderful addition to your toy collection, crafted with love and designed for endless fun!"}</p>
           
           <div className="flex items-center gap-6">
-             <span className="text-4xl font-black text-blue-600">${product.price}</span>
-             <div className="flex items-center gap-1 text-amber-400 bg-amber-50 px-3 py-1 rounded-xl">
-                <Star size={16} fill="currentColor" /> <span className="font-bold text-amber-700 text-sm">4.9 (120+ Reviews)</span>
+             <span className="text-4xl font-black text-primary">${product.price}</span>
+             <div className="flex items-center gap-1 text-secondary bg-secondary/10 px-3 py-1 rounded-xl">
+                 <Star size={16} fill="currentColor" /> <span className="font-bold text-secondary-hover text-sm">4.9 (120+ Reviews)</span>
              </div>
           </div>
 
           <div className="pt-6 border-t border-gray-100 flex flex-col gap-4">
             <button 
               onClick={() => addToCart(product)}
-              className="w-full bg-gray-900 text-white py-5 rounded-2xl font-black text-xl hover:bg-blue-600 transition-all flex items-center justify-center gap-3 shadow-xl hover:shadow-blue-200"
+              className="w-full bg-gray-900 text-white py-5 rounded-full font-black text-xl hover:bg-primary transition-all flex items-center justify-center gap-3 shadow-xl hover:shadow-primary/20 cursor-pointer"
             >
               <ShoppingBag /> Add to Bag
             </button>

@@ -75,19 +75,21 @@ const Account = () => {
       </div>
 
       <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-        <Package className="text-blue-600" /> Recent Orders
+        <Package className="text-primary" /> Recent Orders
       </h2>
 
       {orders.length === 0 ? (
-        <div className="bg-white p-10 rounded-3xl text-center border-2 border-dashed border-gray-100">
-           <p className="text-gray-400 font-bold">No orders found yet. Time to go shopping!</p>
+        <div className="bg-white p-10 rounded-[2.5rem] shadow-sm border border-gray-100 text-center py-20 flex flex-col items-center gap-4">
+           <span className="text-6xl animate-bounce">📦</span>
+           <h3 className="text-2xl font-black text-gray-800">No orders adopted yet!</h3>
+           <p className="text-gray-500 font-medium max-w-sm">Time to go shopping and adopt some beautiful new toys!</p>
         </div>
       ) : (
         <div className="space-y-4">
           {orders.map((order) => (
             <div 
               key={order._id} 
-              className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-50 flex flex-col gap-6 cursor-pointer"
+              className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-50 flex flex-col gap-6 cursor-pointer hover:shadow-md transition-shadow"
               onClick={() => toggleOrder(order._id)}
             >
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 w-full">
@@ -99,8 +101,8 @@ const Account = () => {
                 </div>
                 <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
                   <div className="flex items-center gap-2">
-                    <span className="bg-green-50 text-green-600 px-4 py-1 rounded-full text-xs font-bold">Paid</span>
-                    <span className="text-2xl font-black text-blue-600">${order.totalPrice.toFixed(2)}</span>
+                    <span className="bg-success/10 text-success px-4 py-1 rounded-full text-xs font-bold">Paid</span>
+                    <span className="text-2xl font-black text-primary">${order.totalPrice.toFixed(2)}</span>
                   </div>
                   {expandedOrders[order._id] ? <ChevronUp size={20} className="text-gray-400" /> : <ChevronDown size={20} className="text-gray-400" />}
                 </div>
@@ -137,11 +139,11 @@ const Account = () => {
       {purchasedToys.length > 0 && (
         <div className="mt-16">
           <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-            <Tag className="text-yellow-500" /> All Purchased Toys
+            <Tag className="text-secondary-hover" /> All Purchased Toys
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {purchasedToys.map((toy) => (
-              <div key={toy.id} className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-gray-50 flex flex-col gap-4">
+              <div key={toy.id} className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-gray-50 flex flex-col gap-4 hover:scale-105 hover:shadow-xl transition-all duration-300">
                 <img 
                   src={toy.image} 
                   alt={toy.name} 
@@ -155,7 +157,7 @@ const Account = () => {
                 </div>
                 <div className="flex justify-between items-center mt-2 border-t border-gray-50 pt-3">
                   <span className="text-xs text-gray-400 font-bold uppercase tracking-wider">Total Qty</span>
-                  <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-black">
+                  <span className="bg-secondary/20 text-secondary-hover px-3 py-1 rounded-full text-xs font-black">
                     {toy.totalQty} owned
                   </span>
                 </div>

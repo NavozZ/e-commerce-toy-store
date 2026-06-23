@@ -13,7 +13,6 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      
       const { data } = await axios.post('/api/auth/register', { name, email, password });
       login(data);
       alert('Registration Successful!');
@@ -24,28 +23,33 @@ const Register = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-20 p-8 bg-yellow-200 rounded-3xl shadow-xl">
-      <h2 className="text-2xl font-bold mb-6 text-center text-blue-600">Register</h2>
+    <div className="max-w-md mx-auto mt-20 p-10 bg-white border border-gray-100 rounded-[2.5rem] shadow-xl">
+      <h2 className="text-3xl font-black mb-8 text-center text-primary">Register</h2>
       <form onSubmit={handleRegister} className="space-y-4">
         <input 
           type="text" placeholder="Full Name" required 
-          className="w-full p-4 bg-gray-50 border rounded-xl"
+          className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary outline-none"
           value={name} onChange={e => setName(e.target.value)} 
         />
         <input 
           type="email" placeholder="Email" required 
-          className="w-full p-4 bg-gray-50 border rounded-xl"
+          className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary outline-none"
           value={email} onChange={e => setEmail(e.target.value)} 
         />
         <input 
           type="password" placeholder="Password" required 
-          className="w-full p-4 bg-gray-50 border rounded-xl"
+          className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary outline-none"
           value={password} onChange={e => setPassword(e.target.value)} 
         />
-        <button className="w-full bg-blue-600 text-white py-4 rounded-xl font-bold">Register</button>
+        <button className="w-full bg-primary hover:bg-primary-hover text-white py-4 rounded-full font-black cursor-pointer shadow-lg hover:shadow-primary/20 transition-all">
+          Register
+        </button>
       </form>
-      <div className="mt-4 text-center">
-        <Link to="/login" className="text-blue-600 font-bold">Login instead</Link>
+      <div className="mt-6 text-center text-sm text-gray-500">
+        <p>Already have an account?</p>
+        <Link to="/login" className="text-primary font-black hover:underline mt-1 inline-block">
+          Login instead
+        </Link>
       </div>
     </div>
   );

@@ -90,7 +90,7 @@ const ManageProducts = () => {
   };
 
   return (
-    <div className="max-w-350 mx-auto px-6 py-10">
+    <div className="max-w-7xl mx-auto px-6 py-10">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100 h-fit">
           <h2 className="text-2xl font-black mb-6">{editingId ? 'Edit Toy' : 'List New Toy'}</h2>
@@ -100,7 +100,7 @@ const ManageProducts = () => {
              <input type="number" placeholder="Price" className="w-full p-4 bg-gray-50 rounded-2xl outline-none" 
                onChange={e => setFormData({...formData, price: e.target.value})} value={formData.price} required />
              <select 
-               className="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500" 
+               className="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-primary" 
                value={formData.category} 
                onChange={e => setFormData({...formData, category: e.target.value})} 
                required
@@ -115,7 +115,6 @@ const ManageProducts = () => {
                )}
              </select>
              
-             
              <input type="text" placeholder="Image URL (imageUrl)" className="w-full p-4 bg-gray-50 rounded-2xl outline-none" 
                onChange={e => setFormData({...formData, imageUrl: e.target.value})} value={formData.imageUrl} required />
              
@@ -126,20 +125,20 @@ const ManageProducts = () => {
                onChange={e => setFormData({...formData, description: e.target.value})} value={formData.description} required />
              
              <div className="flex gap-2">
-               <button disabled={loading} className="w-full bg-blue-600 text-white py-4 rounded-2xl font-black flex items-center justify-center gap-2 hover:bg-black transition-all">
-                  {loading ? <Loader2 className="animate-spin" /> : editingId ? <><Edit3 size={20} /> Update Toy</> : <><PlusCircle size={20} /> Add Product</>}
-               </button>
-               {editingId && (
-                 <button type="button" onClick={cancelEdit} className="px-6 bg-gray-200 text-gray-700 py-4 rounded-2xl font-black hover:bg-gray-300 transition-all">
-                   Cancel
-                 </button>
-               )}
+                <button disabled={loading} className="w-full bg-primary text-white py-4 rounded-full font-black flex items-center justify-center gap-2 hover:bg-primary-hover transition-all cursor-pointer shadow-lg hover:shadow-primary/20">
+                   {loading ? <Loader2 className="animate-spin" /> : editingId ? <><Edit3 size={20} /> Update Toy</> : <><PlusCircle size={20} /> Add Product</>}
+                </button>
+                {editingId && (
+                  <button type="button" onClick={cancelEdit} className="px-6 bg-gray-200 text-gray-700 py-4 rounded-full font-black hover:bg-gray-300 transition-all cursor-pointer">
+                    Cancel
+                  </button>
+                )}
              </div>
           </form>
         </div>
 
         <div className="lg:col-span-2 space-y-6">
-           <h2 className="text-2xl font-black flex items-center gap-2"><Package className="text-amber-500" /> Inventory</h2>
+           <h2 className="text-2xl font-black flex items-center gap-2"><Package className="text-secondary" /> Inventory</h2>
            <div className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
              <table className="w-full text-left">
                <thead className="bg-gray-50 border-b border-gray-100">
@@ -153,10 +152,10 @@ const ManageProducts = () => {
                  {products.map((p) => (
                    <tr key={p._id}>
                      <td className="p-6 font-bold text-gray-800">{p.name}</td>
-                     <td className="p-6 font-black text-blue-600">${p.price}</td>
-                     <td className="p-6 text-right space-x-2">
-                        <button onClick={() => handleEdit(p)} className="p-3 text-blue-400 hover:bg-blue-50 rounded-xl"><Edit3 size={18}/></button>
-                        <button onClick={() => deleteHandler(p._id)} className="p-3 text-red-400 hover:bg-red-50 rounded-xl"><Trash2 size={18}/></button>
+                     <td className="p-6 font-black text-primary">${p.price}</td>
+                     <td className="p-6 text-right space-x-2 text-gray-600">
+                        <button onClick={() => handleEdit(p)} className="p-3 text-primary hover:bg-primary/10 rounded-full cursor-pointer"><Edit3 size={18}/></button>
+                        <button onClick={() => deleteHandler(p._id)} className="p-3 text-rose-400 hover:bg-rose-55 rounded-full cursor-pointer"><Trash2 size={18}/></button>
                      </td>
                    </tr>
                  ))}

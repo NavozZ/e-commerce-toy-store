@@ -26,12 +26,12 @@ const Categories = () => {
           <Link 
             key={cat._id} 
             to={`/search?category=${cat.name}`} 
-            className="flex flex-col items-center gap-4 p-8 rounded-4xl bg-yellow-200 border border-gray-100 hover:border-blue-200 hover:shadow-lg transition-all group"
+            className="flex flex-col items-center gap-4 p-8 rounded-4xl bg-secondary/15 border border-gray-100 hover:border-primary/30 hover:scale-105 hover:shadow-xl transition-all duration-300 group"
           >
-            <div className="p-4 rounded-2xl bg-blue-50 text-blue-500 group-hover:scale-110 transition-transform">
+            <div className="p-4 rounded-2xl bg-primary/10 text-primary group-hover:scale-110 transition-transform">
               <Package size={32} />
             </div>
-            <span className="font-bold text-gray-600 group-hover:text-blue-600">{cat.name}</span>
+            <span className="font-bold text-gray-600 group-hover:text-primary transition-colors">{cat.name}</span>
           </Link>
         ))}
       </div>

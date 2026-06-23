@@ -1,19 +1,14 @@
 import React from 'react';
 
-import { Rocket, ShieldCheck, Truck } from 'lucide-react';
 import Hero from '../components/Hero';
 import Categories from '../components/Categories';
 import About from '../components/About';
 import BestSellers from '../components/BestSellers';
-import LiveFeed from '../components/LiveFeed';
-
 
 const Home = () => {
   return (
-    <main className="min-h-screen bg-white">
-
-      <div className="max-w-350 mx-auto px-4 md:px-8 space-y-20 pb-20">
-        
+    <main className="min-h-screen bg-bg-cream">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-20 pb-20">
         <Hero />
         <Categories />       
         <About />
