@@ -4,6 +4,7 @@ import axios from '../api/axios';
 import { CartContext } from '../context/CartContext';
 import { WishlistContext } from '../context/WishlistContext';
 import { ShoppingBag, ArrowLeft, Star, ShieldCheck, Heart } from 'lucide-react';
+import StockIndicator from '../components/StockIndicator';
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -41,20 +42,22 @@ const ProductDetails = () => {
           
           <p className="text-gray-500 leading-relaxed text-lg">{product.description || "A wonderful addition to your toy collection, crafted with love and designed for endless fun!"}</p>
           
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 flex-wrap">
              <span className="text-4xl font-black text-primary">${product.price}</span>
              <div className="flex items-center gap-1 text-secondary bg-secondary/10 px-3 py-1 rounded-xl">
                  <Star size={16} fill="currentColor" /> <span className="font-bold text-secondary-hover text-sm">4.9 (120+ Reviews)</span>
              </div>
+             <StockIndicator stock={product.stock} />
           </div>
 
           <div className="pt-6 border-t border-gray-100 flex flex-col gap-4">
             <div className="flex gap-4">
               <button 
+                disabled={product.stock === 0}
                 onClick={() => addToCart(product)}
-                className="flex-1 bg-gray-900 text-white py-5 rounded-full font-black text-xl hover:bg-primary transition-all flex items-center justify-center gap-3 shadow-xl hover:shadow-primary/20 cursor-pointer"
+                className="flex-1 bg-gray-900 text-white py-5 rounded-full font-black text-xl hover:bg-primary transition-all flex items-center justify-center gap-3 shadow-xl hover:shadow-primary/20 cursor-pointer disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed disabled:shadow-none"
               >
-                <ShoppingBag /> Add to Bag
+                <ShoppingBag /> {product.stock === 0 ? 'Out of Stock' : 'Add to Bag'}
               </button>
               <button 
                 onClick={() => toggleWishlist(product)}

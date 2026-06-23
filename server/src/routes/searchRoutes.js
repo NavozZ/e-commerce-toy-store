@@ -18,7 +18,7 @@ router.get('/categories', async (req, res) => {
 // @desc    Search & Filter products
 router.get('/filter', async (req, res) => {
   try {
-    const { keyword, category, minPrice, maxPrice } = req.query;
+    const { keyword, category, minPrice, maxPrice, ageRange } = req.query;
     
     // Build Query
     let query = {};

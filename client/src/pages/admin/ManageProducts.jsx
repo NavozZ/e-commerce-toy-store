@@ -17,7 +17,8 @@ const ManageProducts = () => {
     category: '', 
     imageUrl: '', 
     description: '',
-    stock: ''
+    stock: '',
+    ageRange: 'All Ages'
   });
 
   const fetchProducts = async () => {
@@ -53,7 +54,7 @@ const ManageProducts = () => {
         });
         alert("Toy added successfully! 🧸");
       }
-      setFormData({ name: '', price: '', category: categories.length > 0 ? categories[0].name : '', imageUrl: '', description: '', stock: '' });
+      setFormData({ name: '', price: '', category: categories.length > 0 ? categories[0].name : '', imageUrl: '', description: '', stock: '', ageRange: 'All Ages' });
       setEditingId(null);
       fetchProducts();
     } catch (err) {
@@ -71,13 +72,14 @@ const ManageProducts = () => {
       category: p.category,
       imageUrl: p.imageUrl,
       description: p.description,
-      stock: p.stock || ''
+      stock: p.stock || '',
+      ageRange: p.ageRange || 'All Ages'
     });
   };
 
   const cancelEdit = () => {
     setEditingId(null);
-    setFormData({ name: '', price: '', category: categories.length > 0 ? categories[0].name : '', imageUrl: '', description: '', stock: '' });
+    setFormData({ name: '', price: '', category: categories.length > 0 ? categories[0].name : '', imageUrl: '', description: '', stock: '', ageRange: 'All Ages' });
   };
 
   const deleteHandler = async (id) => {
@@ -113,6 +115,20 @@ const ManageProducts = () => {
                    <option key={c._id} value={c.name}>{c.name}</option>
                  ))
                )}
+             </select>
+
+             <select 
+               className="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-primary" 
+               value={formData.ageRange} 
+               onChange={e => setFormData({...formData, ageRange: e.target.value})} 
+               required
+             >
+               <option value="All Ages">All Ages</option>
+               <option value="0-2">0-2 years</option>
+               <option value="3-5">3-5 years</option>
+               <option value="6-8">6-8 years</option>
+               <option value="9-12">9-12 years</option>
+               <option value="13+">13+ years</option>
              </select>
              
              <input type="text" placeholder="Image URL (imageUrl)" className="w-full p-4 bg-gray-50 rounded-2xl outline-none" 
@@ -151,7 +167,10 @@ const ManageProducts = () => {
                <tbody className="divide-y divide-gray-50">
                  {products.map((p) => (
                    <tr key={p._id}>
-                     <td className="p-6 font-bold text-gray-800">{p.name}</td>
+                     <td className="p-6 font-bold text-gray-800">
+                       <p>{p.name}</p>
+                       <p className="text-xs text-gray-400">Ages: {p.ageRange || 'All Ages'}</p>
+                     </td>
                      <td className="p-6 font-black text-primary">${p.price}</td>
                      <td className="p-6 text-right space-x-2 text-gray-600">
                         <button onClick={() => handleEdit(p)} className="p-3 text-primary hover:bg-primary/10 rounded-full cursor-pointer"><Edit3 size={18}/></button>
