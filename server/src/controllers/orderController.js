@@ -1,7 +1,8 @@
 const asyncHandler = require('../utils/asyncHandler');
 
 const Order = require('../models/Order');
-
+const Product = require('../models/Product');
+const Cart = require('../models/Cart');
 
 exports.createOrder = asyncHandler(async (req, res) => {
   const { orderItems, shippingAddress, totalPrice } = req.body;
@@ -26,7 +27,23 @@ exports.createOrder = asyncHandler(async (req, res) => {
 
     const createdOrder = await order.save();
 
-   
+    await Promise.all(
+      orderItems.map(async (item) => {
+        const updatedProduct = await Product.findByIdAndUpdate(
+          item.product,
+          { $inc: { stock: -item.qty } },
+          { new: true }
+        );
+        if (updatedProduct && updatedProduct.stock < 0) {
+          console.warn(
+            `Warning: Product ${updatedProduct._id} (${updatedProduct.name}) has negative stock: ${updatedProduct.stock}`
+          );
+        }
+      })
+    );
+
+    await Cart.findOneAndDelete({ user: req.user._id });
+
     const io = req.app.get('socketio');
     if (io) {
       io.emit('broadcast-alert', {
@@ -41,7 +58,6 @@ exports.createOrder = asyncHandler(async (req, res) => {
     });
   }
 });
-
 
 exports.getMyOrders = asyncHandler(async (req, res) => {
   try {
