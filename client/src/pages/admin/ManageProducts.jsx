@@ -6,6 +6,7 @@ import { PlusCircle, Package, Trash2, Loader2, Edit3 } from 'lucide-react';
 const ManageProducts = () => {
   const { user } = useContext(AuthContext);
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   
   const [editingId, setEditingId] = useState(null);
@@ -13,7 +14,7 @@ const ManageProducts = () => {
   const [formData, setFormData] = useState({ 
     name: '', 
     price: '', 
-    category: 'Lego', 
+    category: '', 
     imageUrl: '', 
     description: '',
     stock: ''
@@ -24,7 +25,18 @@ const ManageProducts = () => {
     setProducts(data);
   };
 
-  useEffect(() => { fetchProducts(); }, []);
+  const fetchCategories = async () => {
+    const { data } = await axios.get('/api/categories');
+    setCategories(data);
+    if (data.length > 0 && !formData.category) {
+      setFormData(prev => ({ ...prev, category: data[0].name }));
+    }
+  };
+
+  useEffect(() => { 
+    fetchProducts(); 
+    fetchCategories();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,7 +53,7 @@ const ManageProducts = () => {
         });
         alert("Toy added successfully! 🧸");
       }
-      setFormData({ name: '', price: '', category: 'Lego', imageUrl: '', description: '', stock: '' });
+      setFormData({ name: '', price: '', category: categories.length > 0 ? categories[0].name : '', imageUrl: '', description: '', stock: '' });
       setEditingId(null);
       fetchProducts();
     } catch (err) {
@@ -65,7 +77,7 @@ const ManageProducts = () => {
 
   const cancelEdit = () => {
     setEditingId(null);
-    setFormData({ name: '', price: '', category: 'Lego', imageUrl: '', description: '', stock: '' });
+    setFormData({ name: '', price: '', category: categories.length > 0 ? categories[0].name : '', imageUrl: '', description: '', stock: '' });
   };
 
   const deleteHandler = async (id) => {
@@ -92,13 +104,15 @@ const ManageProducts = () => {
                value={formData.category} 
                onChange={e => setFormData({...formData, category: e.target.value})} 
                required
+               disabled={categories.length === 0}
                >
-               <option value="Lego">Lego</option>
-               <option value="Vehicles">Vehicles</option>
-               <option value="Animals">Animals</option>
-               <option value="Gaming">Gaming</option>
-               <option value="Baby">Baby</option>
-               <option value="Art">Art</option>
+               {categories.length === 0 ? (
+                 <option value="">Create a category first</option>
+               ) : (
+                 categories.map(c => (
+                   <option key={c._id} value={c.name}>{c.name}</option>
+                 ))
+               )}
              </select>
              
              

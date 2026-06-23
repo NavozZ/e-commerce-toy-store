@@ -1,7 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Github, Twitter, Instagram } from 'lucide-react';
 
 const Footer = () => {
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const { data } = await axios.get('/api/categories');
+        setCategories(data);
+      } catch (err) {}
+    };
+    fetchCategories();
+  }, []);
   return (
     <footer className="bg-yellow-200 text-black py-16 mt-20">
       <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 border-b border-gray-800 pb-12">
@@ -15,9 +27,7 @@ const Footer = () => {
           <div>
             <h4 className="font-bold mb-4 text-xs uppercase tracking-widest">Shop</h4>
             <ul className="text-gray-500 text-sm space-y-2">
-              <li>Lego</li>
-              <li>Vehicles</li>
-              <li>Animals</li>
+              {categories.slice(0, 3).map(c => <li key={c._id}>{c.name}</li>)}
             </ul>
           </div>
           <div>
