@@ -5,7 +5,7 @@ import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import { CartContext } from '../context/CartContext';
 import CheckoutForm from '../components/CheckoutForm';
-import { ShoppingBag, ArrowRight } from 'lucide-react';
+import { ShoppingBag, ArrowRight, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
@@ -15,13 +15,24 @@ if (!stripeKey) {
 const stripePromise = stripeKey ? loadStripe(stripeKey) : null;
 
 const Cart = () => {
-  const { cartItems, clearCart } = useContext(CartContext);
+  const { cartItems, clearCart, removeFromCart, updateQty } = useContext(CartContext);
   const { user } = useContext(AuthContext);
   const [clientSecret, setClientSecret] = useState("");
   const [showPayment, setShowPayment] = useState(false);
   const navigate = useNavigate();
 
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
+
+  const handleQtyChange = (id, currentQty, delta) => {
+    const newQty = currentQty + delta;
+    if (newQty < 1) {
+      if (window.confirm("Remove this item from your cart?")) {
+        removeFromCart(id);
+      }
+    } else {
+      updateQty(id, newQty);
+    }
+  };
 
   
   const initiatePayment = async () => {
@@ -78,7 +89,14 @@ const Cart = () => {
                <h3 className="font-bold">{item.name}</h3>
                <p className="text-blue-600 font-bold">${item.price}</p>
              </div>
-             <span className="font-bold bg-gray-100 px-3 py-1 rounded-lg">x{item.qty}</span>
+             <div className="flex items-center gap-3 bg-gray-50 rounded-2xl p-2">
+               <button onClick={() => handleQtyChange(item._id, item.qty, -1)} className="w-8 h-8 rounded-xl bg-white flex items-center justify-center font-bold hover:bg-gray-100 transition-colors">-</button>
+               <span className="font-bold w-4 text-center">{item.qty}</span>
+               <button onClick={() => handleQtyChange(item._id, item.qty, 1)} className="w-8 h-8 rounded-xl bg-white flex items-center justify-center font-bold hover:bg-gray-100 transition-colors">+</button>
+             </div>
+             <button onClick={() => { if(window.confirm("Remove item?")) removeFromCart(item._id); }} className="p-3 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-2xl transition-colors">
+               <Trash2 size={20} />
+             </button>
            </div>
         ))}
       </div>

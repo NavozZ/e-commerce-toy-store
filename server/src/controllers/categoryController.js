@@ -36,11 +36,13 @@ exports.deleteCategory = asyncHandler(async (req, res) => {
 
 exports.updateCategory = asyncHandler(async (req, res) => {
   try {
-    const { name } = req.body;
+    const { name, icon, color } = req.body;
     const category = await Category.findById(req.params.id);
 
     if (category) {
       category.name = name || category.name;
+      category.icon = icon || category.icon;
+      category.color = color || category.color;
       const updatedCategory = await category.save();
       res.json(updatedCategory);
     } else {

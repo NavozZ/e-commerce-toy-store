@@ -8,6 +8,12 @@ const { errorHandler } = require('./middleware/errorHandler');
 
 // 1. Config & DB Connection
 require('dotenv').config();
+
+if (!process.env.JWT_SECRET) {
+  console.error("Missing JWT_SECRET in .env");
+  process.exit(1);
+}
+
 connectDB(); 
 
 const app = express();
