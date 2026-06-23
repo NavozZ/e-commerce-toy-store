@@ -1,20 +1,24 @@
 import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
+import axios from '../../api/axios';
 import { AuthContext } from '../../context/AuthContext';
-import { PlusCircle, Package, Trash2, Loader2 } from 'lucide-react';
+import { PlusCircle, Package, Trash2, Loader2, Edit3 } from 'lucide-react';
 
 const ManageProducts = () => {
   const { user } = useContext(AuthContext);
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   
+  const [editingId, setEditingId] = useState(null);
   
   const [formData, setFormData] = useState({ 
     name: '', 
     price: '', 
-    category: 'Lego', 
+    category: '', 
     imageUrl: '', 
-    description: '' 
+    description: '',
+    stock: '',
+    ageRange: 'All Ages'
   });
 
   const fetchProducts = async () => {
@@ -22,23 +26,60 @@ const ManageProducts = () => {
     setProducts(data);
   };
 
-  useEffect(() => { fetchProducts(); }, []);
+  const fetchCategories = async () => {
+    const { data } = await axios.get('/api/categories');
+    setCategories(data);
+    if (data.length > 0 && !formData.category) {
+      setFormData(prev => ({ ...prev, category: data[0].name }));
+    }
+  };
+
+  useEffect(() => { 
+    fetchProducts(); 
+    fetchCategories();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post('/api/products', formData, {
-        headers: { Authorization: `Bearer ${user.token}` }
-      });
-      alert("Toy added successfully! 🧸");
-      setFormData({ name: '', price: '', category: 'Lego', imageUrl: '', description: '' });
+      if (editingId) {
+        await axios.put(`/api/products/${editingId}`, formData, {
+          headers: { Authorization: `Bearer ${user.token}` }
+        });
+        alert("Toy updated successfully! 🧸");
+      } else {
+        await axios.post('/api/products', formData, {
+          headers: { Authorization: `Bearer ${user.token}` }
+        });
+        alert("Toy added successfully! 🧸");
+      }
+      setFormData({ name: '', price: '', category: categories.length > 0 ? categories[0].name : '', imageUrl: '', description: '', stock: '', ageRange: 'All Ages' });
+      setEditingId(null);
       fetchProducts();
     } catch (err) {
-      alert("Creation Failed: " + (err.response?.data?.message || err.message));
+      alert((editingId ? "Update" : "Creation") + " Failed: " + (err.response?.data?.message || err.message));
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleEdit = (p) => {
+    setEditingId(p._id);
+    setFormData({
+      name: p.name,
+      price: p.price,
+      category: p.category,
+      imageUrl: p.imageUrl,
+      description: p.description,
+      stock: p.stock || '',
+      ageRange: p.ageRange || 'All Ages'
+    });
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setFormData({ name: '', price: '', category: categories.length > 0 ? categories[0].name : '', imageUrl: '', description: '', stock: '', ageRange: 'All Ages' });
   };
 
   const deleteHandler = async (id) => {
@@ -51,44 +92,69 @@ const ManageProducts = () => {
   };
 
   return (
-    <div className="max-w-350 mx-auto px-6 py-10">
+    <div className="max-w-7xl mx-auto px-6 py-10">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100 h-fit">
-          <h2 className="text-2xl font-black mb-6">List New Toy</h2>
+          <h2 className="text-2xl font-black mb-6">{editingId ? 'Edit Toy' : 'List New Toy'}</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
              <input type="text" placeholder="Name" className="w-full p-4 bg-gray-50 rounded-2xl outline-none" 
                onChange={e => setFormData({...formData, name: e.target.value})} value={formData.name} required />
              <input type="number" placeholder="Price" className="w-full p-4 bg-gray-50 rounded-2xl outline-none" 
                onChange={e => setFormData({...formData, price: e.target.value})} value={formData.price} required />
              <select 
-               className="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500" 
+               className="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-primary" 
                value={formData.category} 
                onChange={e => setFormData({...formData, category: e.target.value})} 
                required
+               disabled={categories.length === 0}
                >
-               <option value="Lego">Lego</option>
-               <option value="Vehicles">Vehicles</option>
-               <option value="Animals">Animals</option>
-               <option value="Gaming">Gaming</option>
-               <option value="Baby">Baby</option>
-               <option value="Art">Art</option>
+               {categories.length === 0 ? (
+                 <option value="">Create a category first</option>
+               ) : (
+                 categories.map(c => (
+                   <option key={c._id} value={c.name}>{c.name}</option>
+                 ))
+               )}
              </select>
-             
+
+             <select 
+               className="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-primary" 
+               value={formData.ageRange} 
+               onChange={e => setFormData({...formData, ageRange: e.target.value})} 
+               required
+             >
+               <option value="All Ages">All Ages</option>
+               <option value="0-2">0-2 years</option>
+               <option value="3-5">3-5 years</option>
+               <option value="6-8">6-8 years</option>
+               <option value="9-12">9-12 years</option>
+               <option value="13+">13+ years</option>
+             </select>
              
              <input type="text" placeholder="Image URL (imageUrl)" className="w-full p-4 bg-gray-50 rounded-2xl outline-none" 
                onChange={e => setFormData({...formData, imageUrl: e.target.value})} value={formData.imageUrl} required />
              
+             <input type="number" placeholder="Stock" className="w-full p-4 bg-gray-50 rounded-2xl outline-none" 
+               onChange={e => setFormData({...formData, stock: e.target.value})} value={formData.stock} required />
+
              <textarea placeholder="Description" className="w-full p-4 bg-gray-50 rounded-2xl outline-none h-32" 
                onChange={e => setFormData({...formData, description: e.target.value})} value={formData.description} required />
              
-             <button disabled={loading} className="w-full bg-blue-600 text-white py-4 rounded-2xl font-black flex items-center justify-center gap-2 hover:bg-black transition-all">
-                {loading ? <Loader2 className="animate-spin" /> : <><PlusCircle size={20} /> Add Product</>}
-             </button>
+             <div className="flex gap-2">
+                <button disabled={loading} className="w-full bg-primary text-white py-4 rounded-full font-black flex items-center justify-center gap-2 hover:bg-primary-hover transition-all cursor-pointer shadow-lg hover:shadow-primary/20">
+                   {loading ? <Loader2 className="animate-spin" /> : editingId ? <><Edit3 size={20} /> Update Toy</> : <><PlusCircle size={20} /> Add Product</>}
+                </button>
+                {editingId && (
+                  <button type="button" onClick={cancelEdit} className="px-6 bg-gray-200 text-gray-700 py-4 rounded-full font-black hover:bg-gray-300 transition-all cursor-pointer">
+                    Cancel
+                  </button>
+                )}
+             </div>
           </form>
         </div>
 
         <div className="lg:col-span-2 space-y-6">
-           <h2 className="text-2xl font-black flex items-center gap-2"><Package className="text-amber-500" /> Inventory</h2>
+           <h2 className="text-2xl font-black flex items-center gap-2"><Package className="text-secondary" /> Inventory</h2>
            <div className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
              <table className="w-full text-left">
                <thead className="bg-gray-50 border-b border-gray-100">
@@ -101,10 +167,14 @@ const ManageProducts = () => {
                <tbody className="divide-y divide-gray-50">
                  {products.map((p) => (
                    <tr key={p._id}>
-                     <td className="p-6 font-bold text-gray-800">{p.name}</td>
-                     <td className="p-6 font-black text-blue-600">${p.price}</td>
-                     <td className="p-6 text-right">
-                        <button onClick={() => deleteHandler(p._id)} className="p-3 text-red-400 hover:bg-red-50 rounded-xl"><Trash2 size={18}/></button>
+                     <td className="p-6 font-bold text-gray-800">
+                       <p>{p.name}</p>
+                       <p className="text-xs text-gray-400">Ages: {p.ageRange || 'All Ages'}</p>
+                     </td>
+                     <td className="p-6 font-black text-primary">${p.price}</td>
+                     <td className="p-6 text-right space-x-2 text-gray-600">
+                        <button onClick={() => handleEdit(p)} className="p-3 text-primary hover:bg-primary/10 rounded-full cursor-pointer"><Edit3 size={18}/></button>
+                        <button onClick={() => deleteHandler(p._id)} className="p-3 text-rose-400 hover:bg-rose-55 rounded-full cursor-pointer"><Trash2 size={18}/></button>
                      </td>
                    </tr>
                  ))}

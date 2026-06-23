@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
-import { Bell, Sparkles, X } from 'lucide-react';
+import { Sparkles, X } from 'lucide-react';
 
 const socket = io(window.location.origin.replace('5173', '5000'));
 
@@ -8,10 +8,8 @@ const LiveFeed = () => {
   const [alert, setAlert] = useState(null);
 
   useEffect(() => {
-    
     socket.on('broadcast-alert', (data) => {
       setAlert(data.message);
-      
       setTimeout(() => setAlert(null), 8000);
     });
 
@@ -22,12 +20,12 @@ const LiveFeed = () => {
 
   return (
     <div className="fixed top-24 left-1/2 -translate-x-1/2 z-60 w-full max-w-md px-4 animate-in fade-in slide-in-from-top-4">
-      <div className="bg-blue-600 text-white p-4 rounded-3xl shadow-2xl flex items-center gap-4 border-4 border-white">
+      <div className="bg-primary text-white p-4 rounded-3xl shadow-2xl flex items-center gap-4 border-4 border-white">
         <div className="bg-white/20 p-2 rounded-full">
-          <Sparkles className="animate-pulse" size={20} />
+          <Sparkles className="animate-pulse text-secondary" size={20} />
         </div>
         <p className="flex-1 text-sm font-black italic">{alert}</p>
-        <button onClick={() => setAlert(null)} className="hover:rotate-90 transition-transform">
+        <button onClick={() => setAlert(null)} className="hover:rotate-90 transition-transform cursor-pointer">
           <X size={18} />
         </button>
       </div>

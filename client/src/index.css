@@ -1,1 +1,67 @@
 @import "tailwindcss";
+
+@theme {
+  --color-primary: #7C3AED;
+  --color-primary-hover: #6D28D9;
+  --color-secondary: #FFB800;
+  --color-secondary-hover: #E2A200;
+  --color-success: #10B981;
+  --color-success-hover: #059669;
+  --color-bg-cream: #FAF9F6;
+  --color-brand-green: #34D399;
+
+  --animate-wiggle: wiggle 0.5s ease-in-out;
+  --animate-confetti: confetti 3s ease-out forwards;
+
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(-12deg) scale(1.2); }
+    75% { transform: rotate(12deg) scale(1.2); }
+  }
+
+  @keyframes confetti {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(80vh) rotate(360deg); opacity: 0; }
+  }
+}
+
+@utility bg-toy-gradient {
+  background-image: linear-gradient(135deg, #7C3AED 0%, #EC4899 100%);
+}
+
+@utility bg-warm-gradient {
+  background-image: linear-gradient(135deg, #FFB800 0%, #F97316 100%);
+}
+
+@utility bg-fresh-gradient {
+  background-image: linear-gradient(135deg, #34D399 0%, #059669 100%);
+}
+
+body {
+  background-image: url('./assets/4680620.jpg');
+  background-attachment: fixed;
+  background-position: bottom center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: #FAF9F6;
+}
+
+/*
+Component files that currently hardcode colors:
+- client/src/components/Navbar.jsx
+- client/src/components/LiveFeed.jsx
+- client/src/components/Hero.jsx
+- client/src/components/Footer.jsx
+- client/src/components/CheckoutForm.jsx
+- client/src/components/Categories.jsx
+- client/src/components/BestSellers.jsx
+- client/src/components/About.jsx
+- client/src/pages/Search.jsx
+- client/src/pages/Register.jsx
+- client/src/pages/Products.jsx
+- client/src/pages/ProductDetails.jsx
+- client/src/pages/Login.jsx
+- client/src/pages/Cart.jsx
+- client/src/pages/Account.jsx
+- client/src/pages/admin/ManageProducts.jsx
+*/

@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
+import axiosInstance from '../api/axios';
 
 export const AuthContext = createContext();
 
@@ -11,6 +12,22 @@ export const AuthProvider = ({ children }) => {
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
+
+    const interceptor = axiosInstance.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response && error.response.status === 401 && !error.config.url.includes('/login')) {
+          logout();
+          alert('Session expired, please log in again');
+          window.location.href = '/login';
+        }
+        return Promise.reject(error);
+      }
+    );
+
+    return () => {
+      axiosInstance.interceptors.response.eject(interceptor);
+    };
   }, []);
 
   

@@ -1,7 +1,9 @@
+const asyncHandler = require('../utils/asyncHandler');
+
 const Product = require('../models/Product');
 
 // Get all toys
-exports.getAllProducts = async (req, res) => {
+exports.getAllProducts = asyncHandler(async (req, res) => {
   try {
     const { category } = req.query; 
     let query = {};
@@ -16,9 +18,9 @@ exports.getAllProducts = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-};
+});
 
-exports.getProductById = async (req, res) => {
+exports.getProductById = asyncHandler(async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     if (product) {
@@ -29,30 +31,34 @@ exports.getProductById = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Invalid ID format" });
   }
-};
+});
 
 //     Get best sellers
-exports.getBestSellers = async (req, res) => {
+exports.getBestSellers = asyncHandler(async (req, res) => {
   try {
     const products = await Product.find({}).limit(4); 
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-};
+});
 
-exports.createProduct = async (req, res) => {
-  const { name, price, description, imageUrl, category } = req.body;
+exports.createProduct = asyncHandler(async (req, res) => {
+  const { name, price, description, imageUrl, category, stock = 0 } = req.body;
+
+  if (price <= 0 || stock < 0) {
+    return res.status(400).json({ message: 'Price must be > 0 and stock cannot be negative' });
+  }
 
   try {
     const product = new Product({
-      user: req.user._id, 
+      createdBy: req.user._id, 
       name,
       price,
       description,
       imageUrl, 
       category,
-      countInStock: 10
+      stock
     });
 
     const createdProduct = await product.save();
@@ -69,18 +75,25 @@ exports.createProduct = async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-};
+});
 
 
-exports.updateProduct = async (req, res) => {
+exports.updateProduct = asyncHandler(async (req, res) => {
+  if (req.body.price <= 0 || req.body.stock < 0) {
+    return res.status(400).json({ message: 'Price must be > 0 and stock cannot be negative' });
+  }
+
   try {
     const product = await Product.findById(req.params.id);
     if (product) {
       product.name = req.body.name || product.name;
       product.price = req.body.price || product.price;
       product.description = req.body.description || product.description;
-      product.image = req.body.image || product.image;
+      product.imageUrl = req.body.imageUrl || product.imageUrl;
       product.category = req.body.category || product.category;
+      if (req.body.stock !== undefined) {
+        product.stock = req.body.stock;
+      }
       
       const updatedProduct = await product.save();
       res.json(updatedProduct);
@@ -90,10 +103,10 @@ exports.updateProduct = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-};
+});
 
 
-exports.deleteProduct = async (req, res) => {
+exports.deleteProduct = asyncHandler(async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     if (product) {
@@ -105,4 +118,4 @@ exports.deleteProduct = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}
+})

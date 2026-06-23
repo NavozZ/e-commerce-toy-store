@@ -18,7 +18,7 @@ router.get('/categories', async (req, res) => {
 // @desc    Search & Filter products
 router.get('/filter', async (req, res) => {
   try {
-    const { keyword, category, minPrice, maxPrice } = req.query;
+    const { keyword, category, minPrice, maxPrice, ageRange } = req.query;
     
     // Build Query
     let query = {};
@@ -41,6 +41,12 @@ router.get('/filter', async (req, res) => {
       query.price = {};
       if (minPrice) query.price.$gte = Number(minPrice);
       if (maxPrice) query.price.$lte = Number(maxPrice);
+    }
+
+    // 4. Filter by Age Range
+    if (ageRange) {
+      const ages = typeof ageRange === 'string' ? ageRange.split(',') : ageRange;
+      query.ageRange = { $in: ages };
     }
 
     // Execute Query

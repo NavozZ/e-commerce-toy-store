@@ -4,15 +4,15 @@ import { PackagePlus, Users, ShoppingCart, LayoutDashboard, Tag, ReceiptText, Me
 
 const AdminDashboard = () => {
   const stats = [
-    { label: 'Total Sales', value: '$1,280', icon: <ShoppingCart />, color: 'bg-green-500' },
-    { label: 'Active Users', value: '42', icon: <Users />, color: 'bg-blue-500' },
-    { label: 'Toys in Stock', value: '15', icon: <PackagePlus />, color: 'bg-purple-500' },
+    { label: 'Total Sales', value: '$1,280', icon: <ShoppingCart />, color: 'bg-success' },
+    { label: 'Active Users', value: '42', icon: <Users />, color: 'bg-primary' },
+    { label: 'Toys in Stock', value: '15', icon: <PackagePlus />, color: 'bg-secondary' },
   ];
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-10">
       <h1 className="text-4xl font-black mb-10 flex items-center gap-4">
-        Admin Hub <LayoutDashboard className="text-amber-500" size={32} />
+        Admin Hub <LayoutDashboard className="text-secondary-hover" size={32} />
       </h1>
 
       {/* Stats Grid */}
@@ -31,32 +31,32 @@ const AdminDashboard = () => {
       <h2 className="text-2xl font-bold mb-6 text-gray-800">Operational Controls</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         
-        {/* Member 1: Product Management */}
-        <Link to="/admin/products" className="group bg-gray-900 text-white p-8 rounded-[2.5rem] hover:bg-blue-600 transition-all shadow-xl">
-          <PackagePlus className="mb-4 text-blue-400 group-hover:text-white" size={40} />
+        {/* Inventory */}
+        <Link to="/admin/products" className="group bg-gray-900 text-white p-8 rounded-[2.5rem] hover:bg-primary hover:scale-105 transition-all shadow-xl">
+          <PackagePlus className="mb-4 text-primary group-hover:text-white" size={40} />
           <h2 className="text-2xl font-black mb-2">Inventory</h2>
-          <p className="text-gray-400 group-hover:text-blue-100 transition-colors">Add, update, or remove toys from the shop.</p>
+          <p className="text-gray-400 group-hover:text-white/95 transition-colors">Add, update, or remove toys from the shop.</p>
         </Link>
 
-        {/* Member 5: Category Management (Mayumi) */}
-        <Link to="/admin/categories" className="group bg-white border border-gray-100 p-8 rounded-[2.5rem] hover:border-purple-500 transition-all shadow-sm">
-          <Tag className="mb-4 text-purple-500" size={40} />
+        {/* Categories */}
+        <Link to="/admin/categories" className="group bg-white border border-gray-100 p-8 rounded-[2.5rem] hover:border-primary hover:scale-105 transition-all shadow-sm">
+          <Tag className="mb-4 text-primary" size={40} />
           <h2 className="text-2xl font-black mb-2 text-gray-900">Categories</h2>
           <p className="text-gray-500">Organize store taxonomy and add new classifications.</p>
         </Link>
 
-        {/* Member 6: Order/Payment Management (Dimethma) */}
-        <Link to="/admin/orders" className="group bg-white border border-gray-100 p-8 rounded-[2.5rem] hover:border-green-500 transition-all shadow-sm">
-          <ReceiptText className="mb-4 text-green-500" size={40} />
+        {/* Orders */}
+        <Link to="/admin/orders" className="group bg-white border border-gray-100 p-8 rounded-[2.5rem] hover:border-success hover:scale-105 transition-all shadow-sm">
+          <ReceiptText className="mb-4 text-success" size={40} />
           <h2 className="text-2xl font-black mb-2 text-gray-900">Orders</h2>
           <p className="text-gray-500">Track customer transactions and payment statuses.</p>
         </Link>
 
-        {/* ✅ Member 4: Announcement Hub (Janidu) */}
-        <Link to="/admin/announcements" className="group bg-amber-500 text-white p-8 rounded-[2.5rem] hover:bg-amber-600 transition-all shadow-xl">
+        {/* Announcements */}
+        <Link to="/admin/announcements" className="group bg-secondary text-white p-8 rounded-[2.5rem] hover:bg-secondary-hover hover:scale-105 transition-all shadow-xl">
           <Megaphone className="mb-4 text-white" size={40} />
           <h2 className="text-2xl font-black mb-2">Announcements</h2>
-          <p className="text-amber-100">Broadcast real-time alerts and news to all users.</p>
+          <p className="text-white/90">Broadcast real-time alerts and news to all users.</p>
         </Link>
 
       </div>
