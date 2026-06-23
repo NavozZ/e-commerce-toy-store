@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const connectDB = require('./infrastructure/db'); 
 const Product = require('./models/Product');
 const User = require('./models/User');
+const Category = require('./models/Category');
 
 dotenv.config();
 connectDB();
@@ -32,7 +33,30 @@ const importData = async () => {
 
     const adminUser = createdUsers[0]._id; 
 
-   
+    // 3. SEED CATEGORIES (skip if already exists)
+    const categoriesToSeed = [
+      { name: 'Building Blocks', icon: 'Blocks', color: 'bg-primary/10 text-primary' },
+      { name: 'Action Figures', icon: 'Shield', color: 'bg-secondary/15 text-secondary-hover' },
+      { name: 'Dolls & Dollhouses', icon: 'Home', color: 'bg-rose-50 text-rose-500' },
+      { name: 'Educational & STEM', icon: 'Atom', color: 'bg-primary/10 text-primary' },
+      { name: 'Outdoor & Sports', icon: 'Sun', color: 'bg-success/10 text-success' },
+      { name: 'Puzzles & Board Games', icon: 'Puzzle', color: 'bg-secondary/15 text-secondary-hover' },
+      { name: 'Arts & Crafts', icon: 'Palette', color: 'bg-primary/10 text-primary' },
+      { name: 'Remote Control & Tech Toys', icon: 'Gamepad2', color: 'bg-success/10 text-success' },
+      { name: 'Plush & Soft Toys', icon: 'Heart', color: 'bg-rose-50 text-rose-500' },
+      { name: 'Baby & Toddler', icon: 'Baby', color: 'bg-success/10 text-success' },
+      { name: 'Vehicles & Die-cast', icon: 'Car', color: 'bg-primary/10 text-primary' },
+      { name: 'Party & Pretend Play', icon: 'PartyPopper', color: 'bg-secondary/15 text-secondary-hover' },
+    ];
+
+    for (const cat of categoriesToSeed) {
+      const exists = await Category.findOne({ name: cat.name });
+      if (!exists) {
+        await Category.create(cat);
+      }
+    }
+    console.log('🏷️  Categories Seeded...');
+
     const sampleProducts = [
       {
         user: adminUser,
@@ -40,7 +64,7 @@ const importData = async () => {
         imageUrl: 'https://m.media-amazon.com/images/I/81IpGj3VfSL._AC_SX679_.jpg',
         description: 'Recreate scenes from the classic Star Wars trilogy with this awesome building toy.',
         brand: 'Lego',
-        category: 'Lego',
+        category: 'Building Blocks',
         price: 49.99,
         countInStock: 10,
         rating: 4.5,
@@ -52,7 +76,7 @@ const importData = async () => {
         imageUrl: 'https://m.media-amazon.com/images/I/812+-L-u42L._AC_SX679_.jpg',
         description: 'Protect the citizens of LEGO City with the action-packed Fire Station set.',
         brand: 'Lego',
-        category: 'Lego',
+        category: 'Building Blocks',
         price: 59.99,
         countInStock: 7,
         rating: 4.0,
@@ -64,7 +88,7 @@ const importData = async () => {
         imageUrl: 'https://m.media-amazon.com/images/I/71uZ1vX1xKL._AC_SX679_.jpg',
         description: 'Speed into an instant Hot Wheels collection with a race-ready pack that features 10 vehicles.',
         brand: 'Hot Wheels',
-        category: 'Vehicles',
+        category: 'Vehicles & Die-cast',
         price: 12.99,
         countInStock: 20,
         rating: 5.0,
@@ -76,7 +100,7 @@ const importData = async () => {
         imageUrl: 'https://m.media-amazon.com/images/I/71+p6+cQcAL._AC_SX679_.jpg',
         description: 'Double sided running, moving forward, backward, turning left, right, 360 degree tumbling flip.',
         brand: 'Generic',
-        category: 'Vehicles',
+        category: 'Remote Control & Tech Toys',
         price: 25.99,
         countInStock: 5,
         rating: 3.5,
@@ -88,7 +112,7 @@ const importData = async () => {
         imageUrl: 'https://m.media-amazon.com/images/I/81P5d6Y+sWL._AC_SX679_.jpg',
         description: 'A soft, life-size teddy bear perfect for hugging and cuddling.',
         brand: 'CuddleCo',
-        category: 'Animals',
+        category: 'Plush & Soft Toys',
         price: 39.99,
         countInStock: 8,
         rating: 4.8,
@@ -100,7 +124,7 @@ const importData = async () => {
         imageUrl: 'https://m.media-amazon.com/images/I/61-PblYntsL._AC_SX679_.jpg',
         description: 'Play at home on the TV or on-the-go with a vibrant 7-inch OLED screen.',
         brand: 'Nintendo',
-        category: 'Gaming',
+        category: 'Remote Control & Tech Toys',
         price: 349.99,
         countInStock: 3,
         rating: 5.0,
@@ -112,7 +136,7 @@ const importData = async () => {
         imageUrl: 'https://m.media-amazon.com/images/I/71J15XgKxmL._AC_SX679_.jpg',
         description: 'Classic stacking fun for your little one with colorful rings and a rocking base.',
         brand: 'Fisher-Price',
-        category: 'Baby',
+        category: 'Baby & Toddler',
         price: 9.99,
         countInStock: 15,
         rating: 4.7,
@@ -124,7 +148,7 @@ const importData = async () => {
         imageUrl: 'https://m.media-amazon.com/images/I/81w3-e-l+JL._AC_SX679_.jpg',
         description: 'All-in-one portable art studio with dozens of crayons, pencils, markers, and sheets of drawing paper.',
         brand: 'Crayola',
-        category: 'Art',
+        category: 'Arts & Crafts',
         price: 24.99,
         countInStock: 12,
         rating: 4.6,
