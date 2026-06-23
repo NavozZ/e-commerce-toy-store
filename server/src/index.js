@@ -14,9 +14,12 @@ const app = express();
 const server = http.createServer(app);
 
 // 2. Socket.io Setup
+const clientUrl = process.env.CLIENT_URL || "http://localhost:5173";
+const allowedOrigins = [clientUrl, "http://127.0.0.1:5173"];
+
 const io = new Server(server, {
   cors: { 
-    origin: ["http://localhost:5173", "http://127.0.0.1:5173"], 
+    origin: allowedOrigins, 
     methods: ["GET", "POST"]
   }
 });
@@ -25,7 +28,9 @@ const io = new Server(server, {
 app.set('socketio', io);
 
 // 3. Middleware
-app.use(cors());
+app.use(cors({
+  origin: allowedOrigins
+}));
 app.use(express.json());
 
 // 4. Routes
