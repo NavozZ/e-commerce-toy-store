@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import axios from 'axios';
+import axios from '../api/axios';
 import { AuthContext } from './AuthContext'; // Need Auth to know if we are logged in
 
 export const CartContext = createContext();

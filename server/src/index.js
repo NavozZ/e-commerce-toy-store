@@ -35,7 +35,8 @@ app.set('socketio', io);
 
 // 3. Middleware
 app.use(cors({
-  origin: allowedOrigins
+  origin: allowedOrigins,
+  credentials: true
 }));
 app.use(express.json());
 

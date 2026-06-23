@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-import axios from 'axios';
+import axios from '../api/axios';
 import { AuthContext } from '../context/AuthContext';
 import { CartContext } from '../context/CartContext';
 import CheckoutForm from '../components/CheckoutForm';

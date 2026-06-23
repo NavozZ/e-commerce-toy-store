@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import axios from 'axios';
+import axios from '../api/axios';
 import { ShoppingBag, Star, Loader2 } from 'lucide-react';
 import { CartContext } from '../context/CartContext'; 
 import { Link } from 'react-router-dom';

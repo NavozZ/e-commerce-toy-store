@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../api/axios';
 import { ShoppingBag, Search as SearchIcon, Loader2 } from 'lucide-react';
 import { CartContext } from '../context/CartContext';
 
