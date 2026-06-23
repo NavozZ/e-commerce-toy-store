@@ -8,6 +8,10 @@ exports.createOrder = async (req, res) => {
     return res.status(400).json({ message: 'No order items' });
   }
 
+  if (!shippingAddress || shippingAddress.address === undefined || shippingAddress.city === undefined || totalPrice === undefined) {
+    return res.status(400).json({ message: 'Missing required fields: shippingAddress or totalPrice' });
+  }
+
   try {
     const order = new Order({
       user: req.user._id,
@@ -39,7 +43,7 @@ exports.createOrder = async (req, res) => {
 
 exports.getMyOrders = async (req, res) => {
   try {
-    const orders = await Order.find({ user: req.user._id });
+    const orders = await Order.find({ user: req.user._id }).populate('orderItems.product');
     res.json(orders);
   } catch (error) {
     res.status(500).json({ message: error.message });
