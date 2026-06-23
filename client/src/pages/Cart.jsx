@@ -8,8 +8,11 @@ import CheckoutForm from '../components/CheckoutForm';
 import { ShoppingBag, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-
-const stripePromise = loadStripe("pk_test_51R9tRPQPiO4dcg7Wj1RN7awlnSpV4xZQHI1F43JnXWJpKoHEvk5hNaZCscfp7UWC92gdjVPwAkBo9fNK5q8UOabN001GXLXazp");
+const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+if (!stripeKey) {
+  console.error("VITE_STRIPE_PUBLISHABLE_KEY is missing in environment variables.");
+}
+const stripePromise = stripeKey ? loadStripe(stripeKey) : null;
 
 const Cart = () => {
   const { cartItems, clearCart } = useContext(CartContext);
@@ -98,7 +101,11 @@ const Cart = () => {
             </button>
           ) : (
             
-            clientSecret && (
+            !stripePromise ? (
+              <div className="bg-red-100 text-red-600 p-4 rounded-xl font-bold mt-4">
+                Configuration Error: Payment system is currently unavailable (Missing Stripe Key).
+              </div>
+            ) : clientSecret && (
               <Elements options={{ clientSecret, appearance: { theme: 'night' } }} stripe={stripePromise}>
                 <CheckoutForm amount={subtotal} onSuccess={handleOrderSuccess} />
               </Elements>
