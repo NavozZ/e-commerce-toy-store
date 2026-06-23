@@ -42,17 +42,21 @@ exports.getBestSellers = async (req, res) => {
 };
 
 exports.createProduct = async (req, res) => {
-  const { name, price, description, imageUrl, category } = req.body;
+  const { name, price, description, imageUrl, category, stock = 0 } = req.body;
+
+  if (price <= 0 || stock < 0) {
+    return res.status(400).json({ message: 'Price must be > 0 and stock cannot be negative' });
+  }
 
   try {
     const product = new Product({
-      user: req.user._id, 
+      createdBy: req.user._id, 
       name,
       price,
       description,
       imageUrl, 
       category,
-      countInStock: 10
+      stock
     });
 
     const createdProduct = await product.save();
@@ -73,14 +77,21 @@ exports.createProduct = async (req, res) => {
 
 
 exports.updateProduct = async (req, res) => {
+  if (req.body.price <= 0 || req.body.stock < 0) {
+    return res.status(400).json({ message: 'Price must be > 0 and stock cannot be negative' });
+  }
+
   try {
     const product = await Product.findById(req.params.id);
     if (product) {
       product.name = req.body.name || product.name;
       product.price = req.body.price || product.price;
       product.description = req.body.description || product.description;
-      product.image = req.body.image || product.image;
+      product.imageUrl = req.body.imageUrl || product.imageUrl;
       product.category = req.body.category || product.category;
+      if (req.body.stock !== undefined) {
+        product.stock = req.body.stock;
+      }
       
       const updatedProduct = await product.save();
       res.json(updatedProduct);
