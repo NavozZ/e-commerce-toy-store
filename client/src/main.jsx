@@ -24,6 +24,7 @@ import ProductDetails from './pages/ProductDetails';
 import ManageCategories from './pages/admin/ManageCategories';
 import ManageAnnouncements from './pages/admin/ManageAnnouncements';
 import Account from './pages/Account';
+import ManageOrders from './pages/admin/ManageOrders';
 
 const NotFound = () => (
   <div className="text-center py-20 text-2xl font-bold text-gray-500">
@@ -50,7 +51,7 @@ createRoot(document.getElementById("root")).render(
               <Route path="admin/products" element={<ManageProducts />} />
               <Route path="admin/categories" element={<ManageCategories />} />
               <Route path="admin/announcements" element={<ManageAnnouncements />} />
-            
+              <Route path="admin/orders" element={<ManageOrders />} />
             </Route>
 
             <Route element={<ProtectLayout />}>

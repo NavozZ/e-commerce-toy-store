@@ -67,3 +67,38 @@ exports.getMyOrders = asyncHandler(async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+exports.getAllOrders = asyncHandler(async (req, res) => {
+  try {
+    const orders = await Order.find({}).populate('user', 'name email').populate('orderItems.product');
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+exports.updateOrderStatus = asyncHandler(async (req, res) => {
+  const { status } = req.body;
+  
+  const validStatuses = ['Pending', 'Paid', 'Shipped', 'Delivered', 'Cancelled'];
+  if (!validStatuses.includes(status)) {
+    return res.status(400).json({ message: `Invalid status: ${status}. Must be one of ${validStatuses.join(', ')}` });
+  }
+
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    order.status = status;
+    if (status === 'Paid') {
+      order.isPaid = true;
+      order.paidAt = Date.now();
+    }
+    const updatedOrder = await order.save();
+    res.json(updatedOrder);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});

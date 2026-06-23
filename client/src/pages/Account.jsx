@@ -2,6 +2,13 @@ import React, { useEffect, useState, useContext } from 'react';
 import axios from '../api/axios';
 import { AuthContext } from '../context/AuthContext';
 import { Package, Calendar, Tag, ChevronDown, ChevronUp } from 'lucide-react';
+const statusColors = {
+  Pending: 'bg-secondary/20 text-secondary-hover border border-secondary/30',
+  Paid: 'bg-primary/10 text-primary border border-primary/20',
+  Shipped: 'bg-purple-100 text-purple-700 border border-purple-200',
+  Delivered: 'bg-success/15 text-success border border-success/30',
+  Cancelled: 'bg-rose-50 text-rose-500 border border-rose-100',
+};
 
 const Account = () => {
   const { user } = useContext(AuthContext);
@@ -101,7 +108,9 @@ const Account = () => {
                 </div>
                 <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
                   <div className="flex items-center gap-2">
-                    <span className="bg-success/10 text-success px-4 py-1 rounded-full text-xs font-bold">Paid</span>
+                    <span className={`px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${statusColors[order.status || 'Paid']}`}>
+                      {order.status || 'Paid'}
+                    </span>
                     <span className="text-2xl font-black text-primary">${order.totalPrice.toFixed(2)}</span>
                   </div>
                   {expandedOrders[order._id] ? <ChevronUp size={20} className="text-gray-400" /> : <ChevronDown size={20} className="text-gray-400" />}
