@@ -6,7 +6,7 @@ import Footer from '../Footer';
 
 const RootLayout = () => {
   return (
-    <div className="min-h-screen bg-bg-cream pb-20 md:pb-0 font-sans">
+    <div className="min-h-screen pb-20 md:pb-0 font-sans">
       <LiveFeed />
       <Navbar />
       

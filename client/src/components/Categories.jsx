@@ -49,20 +49,21 @@ const Categories = () => {
 
   return (
     <section className="py-10">
-      <h2 className="text-2xl font-black mb-8 text-gray-800 uppercase tracking-tight">Shop by Category</h2>
+      <h2 className="text-3xl font-black mb-8 text-gray-900 tracking-tight uppercase">Shop by Category</h2>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
         {categories.map((cat) => {
-          const IconComponent = iconMap[cat.icon] || Package;
+          const isImageUrl = cat.icon && cat.icon.startsWith('http');
+          const IconComponent = !isImageUrl ? (iconMap[cat.icon] || Package) : null;
           return (
             <Link 
               key={cat._id} 
               to={`/search?category=${cat.name}`} 
-              className="flex flex-col items-center gap-4 p-8 rounded-4xl bg-secondary/15 border border-gray-100 hover:border-primary/30 hover:scale-105 hover:shadow-xl transition-all duration-300 group"
+              className="flex flex-col items-center gap-4 p-8 rounded-4xl bg-white border border-gray-100 hover:border-primary/30 hover:scale-105 hover:shadow-2xl transition-all duration-300 group"
             >
               <div className={`p-4 rounded-2xl ${cat.color || 'bg-primary/10 text-primary'} group-hover:scale-110 transition-transform`}>
-                <IconComponent size={32} />
+                {isImageUrl ? <img src={cat.icon} alt={cat.name} className="w-8 h-8 object-contain" /> : <IconComponent size={32} />}
               </div>
-              <span className="font-bold text-gray-600 group-hover:text-primary transition-colors text-center text-sm">{cat.name}</span>
+              <span className="font-bold text-gray-900 group-hover:text-primary transition-colors text-center text-sm">{cat.name}</span>
             </Link>
           );
         })}

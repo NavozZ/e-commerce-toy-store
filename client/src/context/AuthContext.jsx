@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
     const interceptor = axiosInstance.interceptors.response.use(
       (response) => response,
       (error) => {
-        if (error.response && error.response.status === 401) {
+        if (error.response && error.response.status === 401 && !error.config.url.includes('/login')) {
           logout();
           alert('Session expired, please log in again');
           window.location.href = '/login';

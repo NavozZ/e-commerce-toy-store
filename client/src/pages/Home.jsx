@@ -7,7 +7,7 @@ import BestSellers from '../components/BestSellers';
 
 const Home = () => {
   return (
-    <main className="min-h-screen bg-bg-cream">
+    <main className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-20 pb-20">
         <Hero />
         <Categories />       
