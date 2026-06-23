@@ -8,7 +8,12 @@ const productSchema = new mongoose.Schema({
   category: { type: String, required: true },
   stock: { type: Number, required: true, default: 0 },
   imageUrl: { type: String, required: true },
-  isFeatured: { type: Boolean, default: false }
+  isFeatured: { type: Boolean, default: false },
+  ageRange: { 
+    type: String, 
+    enum: ['0-2', '3-5', '6-8', '9-12', '13+', 'All Ages'], 
+    default: 'All Ages' 
+  }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Product', productSchema);

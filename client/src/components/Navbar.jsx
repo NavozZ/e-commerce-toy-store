@@ -7,13 +7,16 @@ import {
   LogOut,
   LayoutGrid,
   Settings,
+  Heart,
 } from 'lucide-react';
 
 import { AuthContext } from '../context/AuthContext';
 import { CartContext } from '../context/CartContext';
+import { WishlistContext } from '../context/WishlistContext';
 
 const Navbar = () => {
   const { cartCount } = useContext(CartContext);
+  const { wishlistCount } = useContext(WishlistContext);
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
   const [wiggle, setWiggle] = useState(false);
@@ -86,6 +89,15 @@ const Navbar = () => {
               <User size={18} /> Login
             </Link>
           )}
+
+          <Link to="/wishlist" className="relative p-2 text-gray-600 hover:text-primary transition-colors">
+            <Heart size={22} />
+            {wishlistCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-secondary text-gray-900 text-[10px] font-black rounded-full h-5 w-5 flex items-center justify-center">
+                {wishlistCount}
+              </span>
+            )}
+          </Link>
 
           <Link to="/cart" className="relative p-2 text-gray-600 hover:text-primary transition-colors">
             <ShoppingCart size={22} />

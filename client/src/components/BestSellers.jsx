@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import axios from '../api/axios';
-import { ShoppingBag, Star, Loader2 } from 'lucide-react';
+import { ShoppingBag, Star, Loader2, Heart } from 'lucide-react';
 import { CartContext } from '../context/CartContext'; 
+import { WishlistContext } from '../context/WishlistContext';
 import { Link } from 'react-router-dom';
 
 const BestSellers = () => {
@@ -10,6 +11,7 @@ const BestSellers = () => {
   const [error, setError] = useState(null);
   
   const { addToCart } = useContext(CartContext);
+  const { toggleWishlist, isWishlisted } = useContext(WishlistContext);
 
   useEffect(() => {
     const fetchBestSellers = async () => {
@@ -51,8 +53,11 @@ const BestSellers = () => {
           <div key={product._id} className="group relative bg-white p-6 rounded-[3rem] border border-gray-100 shadow-sm hover:shadow-2xl hover:scale-105 transition-all duration-300">
             
             <div className="absolute top-6 right-6 z-10">
-              <button className="p-3 bg-white/90 backdrop-blur-md rounded-full shadow-sm hover:bg-primary hover:text-white transition-all text-gray-400">
-                <Star size={20} />
+              <button 
+                onClick={() => toggleWishlist(product)}
+                className={`p-3 bg-white/90 backdrop-blur-md rounded-full shadow-sm hover:bg-rose-50 hover:text-rose-500 transition-all cursor-pointer ${isWishlisted(product._id) ? 'text-rose-500 fill-rose-500' : 'text-gray-400'}`}
+              >
+                <Heart size={20} />
               </button>
             </div>
             

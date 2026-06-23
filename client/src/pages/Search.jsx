@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import axios from '../api/axios';
-import { ShoppingBag, Search as SearchIcon, Loader2 } from 'lucide-react';
+import { ShoppingBag, Search as SearchIcon, Loader2, Heart } from 'lucide-react';
 import { CartContext } from '../context/CartContext';
+import { WishlistContext } from '../context/WishlistContext';
 
 const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -18,6 +19,7 @@ const Search = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const { addToCart } = useContext(CartContext);
+  const { toggleWishlist, isWishlisted } = useContext(WishlistContext);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -107,18 +109,35 @@ const Search = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {products.map((product) => (
-            <div key={product._id} className="group bg-white p-6 rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:scale-105 transition-all duration-300 border border-gray-100">
-              <div className="aspect-square mb-4 bg-gray-50 rounded-2xl overflow-hidden p-6">
-                 <img src={product.imageUrl || product.image} alt={product.name} className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500" />
+            <div key={product._id} className="group relative bg-white p-6 rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:scale-105 transition-all duration-300 border border-gray-100 flex flex-col justify-between">
+              
+              <div className="absolute top-6 right-6 z-10">
+                <button 
+                  onClick={() => toggleWishlist(product)}
+                  className={`p-3 bg-white/90 backdrop-blur-md rounded-full shadow-sm hover:bg-rose-50 hover:text-rose-500 transition-all cursor-pointer ${isWishlisted(product._id) ? 'text-rose-500 fill-rose-500' : 'text-gray-400'}`}
+                >
+                  <Heart size={20} />
+                </button>
               </div>
-              <h3 className="font-bold text-lg mb-1 group-hover:text-primary transition-colors">{product.name}</h3>
-              <p className="text-primary font-black text-xl mb-4">${product.price}</p>
-              <button 
-                onClick={() => addToCart(product)}
-                className="w-full flex items-center justify-center gap-2 bg-gray-900 text-white py-3 rounded-full font-black hover:bg-primary hover:shadow-primary/20 hover:shadow-lg transition-all cursor-pointer"
-              >
-                <ShoppingBag size={18} /> Add
-              </button>
+
+              <Link to={`/product/${product._id}`}>
+                <div className="cursor-pointer">
+                   <img src={product.imageUrl || product.image} alt={product.name} className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500" />
+                </div>
+              </Link>
+              
+              <div className="mt-4 flex-1 flex flex-col justify-between">
+                <Link to={`/product/${product._id}`}>
+                  <h3 className="font-bold text-lg mb-1 group-hover:text-primary transition-colors line-clamp-1">{product.name}</h3>
+                </Link>
+                <p className="text-primary font-black text-xl mb-4">${product.price}</p>
+                <button 
+                  onClick={() => addToCart(product)}
+                  className="w-full flex items-center justify-center gap-2 bg-gray-900 text-white py-3 rounded-full font-black hover:bg-primary hover:shadow-primary/20 hover:shadow-lg transition-all cursor-pointer mt-auto"
+                >
+                  <ShoppingBag size={18} /> Add
+                </button>
+              </div>
             </div>
           ))}
         </div>

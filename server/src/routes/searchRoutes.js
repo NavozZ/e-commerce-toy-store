@@ -43,6 +43,12 @@ router.get('/filter', async (req, res) => {
       if (maxPrice) query.price.$lte = Number(maxPrice);
     }
 
+    // 4. Filter by Age Range
+    if (ageRange) {
+      const ages = typeof ageRange === 'string' ? ageRange.split(',') : ageRange;
+      query.ageRange = { $in: ages };
+    }
+
     // Execute Query
     const products = await Product.find(query);
     res.json(products);
