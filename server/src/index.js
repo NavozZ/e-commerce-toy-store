@@ -4,6 +4,7 @@ const { Server } = require('socket.io');
 const cors = require('cors');
 const connectDB = require('./infrastructure/db'); 
 const paymentRoutes = require('./routes/paymentRoutes');
+const { errorHandler } = require('./middleware/errorHandler');
 
 // 1. Config & DB Connection
 require('dotenv').config();
@@ -36,6 +37,13 @@ app.use('/api/categories', require('./routes/categoryRoutes'));
 app.use('/api/announcements', require('./routes/announcementRoutes')); 
 app.use('/api/cart', require('./routes/cartRoutes'));  
 app.use('/api/payment', paymentRoutes);                      
+
+app.use((req, res, next) => {
+  res.status(404);
+  next(new Error(`Not Found - ${req.originalUrl}`));
+});
+
+app.use(errorHandler);
 
 // 5. WebSocket Logic 
 io.on('connection', (socket) => {

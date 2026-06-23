@@ -1,7 +1,9 @@
+const asyncHandler = require('../utils/asyncHandler');
+
 const Order = require('../models/Order');
 
 
-exports.createOrder = async (req, res) => {
+exports.createOrder = asyncHandler(async (req, res) => {
   const { orderItems, shippingAddress, totalPrice } = req.body;
 
   if (!orderItems || orderItems.length === 0) {
@@ -38,14 +40,14 @@ exports.createOrder = async (req, res) => {
       message: 'Order creation failed: ' + error.message,
     });
   }
-};
+});
 
 
-exports.getMyOrders = async (req, res) => {
+exports.getMyOrders = asyncHandler(async (req, res) => {
   try {
     const orders = await Order.find({ user: req.user._id }).populate('orderItems.product');
     res.json(orders);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-};
+});

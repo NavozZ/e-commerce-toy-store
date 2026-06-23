@@ -1,3 +1,5 @@
+const asyncHandler = require('../utils/asyncHandler');
+
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
@@ -7,7 +9,7 @@ const generateToken = (id) => {
 };
 
 
-exports.registerUser = async (req, res) => {
+exports.registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
   try {
     if (!name || !email || !password) {
@@ -36,10 +38,10 @@ exports.registerUser = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: error.message });
   }
-};
+});
 
 
-exports.loginUser = async (req, res) => {
+exports.loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
@@ -58,4 +60,4 @@ exports.loginUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-};
+});

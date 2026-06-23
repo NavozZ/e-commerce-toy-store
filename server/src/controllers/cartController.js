@@ -1,7 +1,9 @@
+const asyncHandler = require('../utils/asyncHandler');
+
 const Cart = require('../models/Cart');
 
 // @desc    Get user cart (READ)
-exports.getMyCart = async (req, res) => {
+exports.getMyCart = asyncHandler(async (req, res) => {
   try {
     const cart = await Cart.findOne({ user: req.user._id });
     // Return empty array if no cart exists yet
@@ -9,10 +11,10 @@ exports.getMyCart = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-};
+});
 
 // @desc    Sync cart from frontend (CREATE/UPDATE)
-exports.syncCart = async (req, res) => {
+exports.syncCart = asyncHandler(async (req, res) => {
   try {
     const { cartItems } = req.body;
     
@@ -27,4 +29,4 @@ exports.syncCart = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-};
+});
